@@ -19,7 +19,7 @@ package MRPG_Damage
 	{
 		if (isObject(%obj.RPGData) && %sourceObj.getClassName() $= "Projectile")
 		{
-			%damage = getModifiedDamage(%obj, %sourceObj);
+			%damage = getModifiedDamage(%obj, %sourceObj, %damage);
 		}
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
@@ -27,7 +27,7 @@ package MRPG_Damage
 activatePackage(MRPG_Damage);
 
 
-function getModifiedDamage(%bot, %proj)
+function getModifiedDamage(%bot, %proj, %damage)
 {
 	%levDiff = getMax(0, %bot.RPGData.level - %proj.level);
 	
@@ -47,15 +47,25 @@ function getModifiedDamage(%bot, %proj)
 
 		if (%type $= "Magic")
 		{
-			%damage = %levelMod * getMax(%rawDamage * 0.1, %rawDamage - %magicDef);
+			%damage = %levelMod * getMax(%rawDamage * 0.05, %rawDamage - %magicDef);
 		}
 		else if (%type $= "Physical")
 		{
-			%damage = %levelMod * getMax(%rawDamage * 0.1, %rawDamage - %physDef);
+			%damage = %levelMod * getMax(%rawDamage * 0.05, %rawDamage - %physDef);
 		}
 		else
 		{
 			%damage = %levelMod * %rawDamage;
 		}
 	}
+
+	if (%bot.RPGData.maxDamage > 0)
+	{
+		if (%bot.damageFactor $= "")
+		{
+			%bot.damageFactor = %bot.getDatablock().maxDamage / %bot.RPGData.maxDamage;
+		}
+		%finalDamage = %damage * %bot.damageFactor * getWord(%bot.getScale(), 2);
+	}
+	return %finalDamage SPC %damage;
 }

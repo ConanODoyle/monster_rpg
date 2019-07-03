@@ -53,14 +53,13 @@ function logicTick(%idx)
 		%curr = MRPG_AISet.getObject(%idx);
 
 		%data = %curr.RPGData;
-		if (isFunction(%data.botLogicFunc))
-		{
-			call(%data.botLogicFunc, %curr);
-		}
-		else
-		{
-			call(MRPGBot_simpleLogic, %curr);
-		}
+		if (isFunction(%data.botLogicFunc))		call(%data.botLogicFunc, %curr);
+		else									call(MRPGBot_simpleLogic, %curr);
+		
+
+		if (isFunction(%data.botActionFunc))	call(%data.botActionFunc, %curr);
+		else									call(MRPGBot_simpleAction, %curr);
+		
 
 		%idx++;
 	}
@@ -96,4 +95,35 @@ function MRPGBot_simpleLogic(%bot)
 		}
 	}
 	%bot.nextThink = ($Sim::Time + 1 | 0) | 0;
+}
+
+function MRPGBot_simpleAction(%bot)
+{
+	if (%bot.nextAction > $Sim::Time)
+	{
+		return;
+	}
+	
+	%data = %bot.RPGData;
+	%searchData = %data.searchType;
+	
+	if (!isObject(%bot.target))
+	{
+		%bot.target = "";
+		%bot.setMoveX(0);
+		%bot.setMoveY(0);
+		%bot.setAimObject("");
+	}
+	else
+	{
+
+	}
+		if (isFunction(%searchData.searchFunction))
+		{
+			%val = call(%searchData.searchFunction, %bot);
+			%closest = getClosestObjectToPoint(%val, %bot.getPosition());
+			%bot.target = %closest;
+		}
+
+	%bot.nextAction = 0; //always update action every tick
 }
