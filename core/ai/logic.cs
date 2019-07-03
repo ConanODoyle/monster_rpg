@@ -57,6 +57,10 @@ function logicTick(%idx)
 		{
 			call(%data.botLogicFunc, %curr);
 		}
+		else
+		{
+			call(MRPGBot_simpleLogic, %curr);
+		}
 
 		%idx++;
 	}
@@ -84,9 +88,12 @@ function MRPGBot_simpleLogic(%bot)
 	
 	if (!isObject(%bot.target))
 	{
-		%val = call(%searchData.searchFunction, %bot);
-		%closest = getClosestObjectToPoint(%val, %bot.getPosition());
-		%bot.target = %closest;
+		if (isFunction(%searchData.searchFunction))
+		{
+			%val = call(%searchData.searchFunction, %bot);
+			%closest = getClosestObjectToPoint(%val, %bot.getPosition());
+			%bot.target = %closest;
+		}
 	}
 	%bot.nextThink = ($Sim::Time + 1 | 0) | 0;
 }
