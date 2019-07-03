@@ -1,6 +1,6 @@
 echo("");
 echo("--Executing AI--");
-exec("./ai/basic.cs");
+exec("./ai/logic.cs");
 exec("./ai/callbacks.cs");
 exec("./ai/search.cs");
 
