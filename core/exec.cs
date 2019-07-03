@@ -4,5 +4,5 @@ exec("./ai/basic.cs");
 exec("./ai/callbacks.cs");
 exec("./ai/search.cs");
 
-echo("");
-echo("--Executing weapons--");
+// echo("");
+// echo("--Executing weapons--");

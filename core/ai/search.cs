@@ -9,17 +9,17 @@ if (!isObject(SearchTypes))
 {
 	$SearchTypes = new SimSet(SearchTypes) {};
 	
-	SearchTypes.add(new ScriptObject(NearRadiusSearchType)      { searchFunction = MRPGBot_radiusSearch; searchRadius = 30; };
-	SearchTypes.add(new ScriptObject(RadiusSearchType)          { searchFunction = MRPGBot_radiusSearch; searchRadius = 60; };
-	SearchTypes.add(new ScriptObject(FarRadiusSearchType)       { searchFunction = MRPGBot_radiusSearch; searchRadius = 90; };
-	SearchTypes.add(new ScriptObject(NearRadiusLOSSearchType)   { searchFunction = MRPGBot_radiusSearch; searchRadius = 20; requireLOS = 1; };
-	SearchTypes.add(new ScriptObject(RadiusLOSSearchType)       { searchFunction = MRPGBot_radiusSearch; searchRadius = 60; requireLOS = 1; };
-	SearchTypes.add(new ScriptObject(FarRadiusLOSSearchType)    { searchFunction = MRPGBot_radiusSearch; searchRadius = 90; requireLOS = 1; };
-	SearchTypes.add(new ScriptObject(LOSSearchType)             { searchFunction = MRPGBot_radiusSearch; searchRadius = 1000; requireLOS = 1; };
-	SearchTypes.add(new ScriptObject(NearRadiusFOVSearchType)   { searchFunction = MRPGBot_radiusFOVSearch; searchRadius = 20; searchFOV = 160; };
-	SearchTypes.add(new ScriptObject(RadiusFOVSearchType)       { searchFunction = MRPGBot_radiusFOVSearch; searchRadius = 60; searchFOV = 160; };
-	SearchTypes.add(new ScriptObject(FarRadiusFOVSearchType)    { searchFunction = MRPGBot_radiusFOVSearch; searchRadius = 90; searchFOV = 160; };
-	SearchTypes.add(new ScriptObject(FOVSearchType)             { searchFunction = MRPGBot_radiusFOVSearch; searchRadius = 1000; searchFOV = 160; };
+	SearchTypes.add(new ScriptObject(NearRadiusSearchType)      { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 30; } );
+	SearchTypes.add(new ScriptObject(RadiusSearchType)          { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 60; } );
+	SearchTypes.add(new ScriptObject(FarRadiusSearchType)       { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 90; } );
+	SearchTypes.add(new ScriptObject(NearRadiusLOSSearchType)   { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 20; requireLOS = 1; } );
+	SearchTypes.add(new ScriptObject(RadiusLOSSearchType)       { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 60; requireLOS = 1; } );
+	SearchTypes.add(new ScriptObject(FarRadiusLOSSearchType)    { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 90; requireLOS = 1; } );
+	SearchTypes.add(new ScriptObject(LOSSearchType)             { searchFunction = "MRPGBot_radiusSearch"; searchRadius = 1000; requireLOS = 1; } );
+	SearchTypes.add(new ScriptObject(NearRadiusFOVSearchType)   { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 20; searchFOV = 160; } );
+	SearchTypes.add(new ScriptObject(RadiusFOVSearchType)       { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 60; searchFOV = 160; } );
+	SearchTypes.add(new ScriptObject(FarRadiusFOVSearchType)    { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 90; searchFOV = 160; } );
+	SearchTypes.add(new ScriptObject(FOVSearchType)             { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 1000; searchFOV = 160; } );
 	
 	MissionCleanup.add(SearchTypes);
 }
@@ -71,7 +71,7 @@ function MRPGBot_radiusFOVSearch(%bot)
 	{
 		%pl = getWord(%radiusSearch, %i);
 		%vec1 = vectorNormalize(vectorSub(%pl.getHackPosition(), %eyePos));
-		%vec2 = vectorNormalize%bot.getEyeVector());
+		%vec2 = vectorNormalize(%bot.getEyeVector());
 		if (mACos(vectorDot(%vec1, %vec2)) <= %data.searchFOV / 180 * 3.14) //convert FOV (degrees) to radians
 		{
 			%search = %search SPC %pl;

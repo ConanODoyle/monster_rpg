@@ -24,18 +24,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function MRPGBot_simpleLogic(%bot)
 {
 	if (%bot.nextThink > $Sim::Time)
