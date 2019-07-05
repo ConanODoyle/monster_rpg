@@ -1,25 +1,15 @@
 //// structure ////
 // %bot.RPGData = scriptobject with fields defining properties
-// - maxDamage
-// - armor
-// - resist
-// - level
-
-// - searchType (ScriptObject)
-// 	- searchFunction
-// 	- searchRadius
-// 	- etc...
-
 // - attackType (ScriptObject)
 // 	- attackImage
 // 	- triggerTime
-// 	- etc...
+// 	- minRange
+// 	- maxRange
 
 // - botLogicFunc
-// - botActionFunc
 // - damageCallbackFunc
 
-// - expReward
+// - botActionFunc
 
 
 if (!isObject(MRPG_AISet))
@@ -44,7 +34,7 @@ function logicTick(%idx)
 		%idx = 0;
 	}
 
-	for (%i = 0; %i < 16, %i++)
+	for (%i = 0; %i < 16; %i++)
 	{
 		if (%idx >= %count)
 		{
@@ -93,6 +83,14 @@ function MRPGBot_simpleLogic(%bot)
 			%closest = getClosestObjectToPoint(%val, %bot.getPosition());
 			%bot.target = %closest;
 		}
+
+		if (!isObject(%bot.target) && %bot.nextRandomLook < $Sim::Time)
+		{
+			%rand = getRandom(1, 360);
+			%vec = mSin(%rand) SPC mCos(%rand) SPC 0;
+			%bot.setAimVector(%vec);
+			%bot.nextRandomLook = ($Sim::Time + (getRandom(3, 8) | 0)) | 0;
+		}
 	}
 	%bot.nextThink = ($Sim::Time + 1 | 0) | 0;
 }
@@ -112,18 +110,39 @@ function MRPGBot_simpleAction(%bot)
 		%bot.target = "";
 		%bot.setMoveX(0);
 		%bot.setMoveY(0);
-		%bot.setAimObject("");
+		if (isObject(%bot.getAimObject()))
+		{
+			%bot.setAimObject("");
+		}
 	}
 	else
 	{
+		%bot.setAimObject(%bot.target);
 
-	}
-		if (isFunction(%searchData.searchFunction))
+		%attackType = %data.attackType;
+		%maxRange = %attackType.maxRange;
+		%minRange = %attackType.minRange;
+
+		%dist = vectorDist(%bot.getPosition(), %bot.target.getPosition());
+		if (%dist < %minRange)
 		{
-			%val = call(%searchData.searchFunction, %bot);
-			%closest = getClosestObjectToPoint(%val, %bot.getPosition());
-			%bot.target = %closest;
+			%bot.setMoveY(-1);
+			%bot.setMoveX(0);
+			%bot.setImageTrigger(0, 0);
 		}
+		else if (%dist > %maxRange)
+		{
+			%bot.setMoveY(1);
+			%bot.setMoveX(0);
+			%bot.setImageTrigger(0, 0);
+		}
+		else
+		{
+			%bot.setMoveY(0);
+			%bot.setMoveX(0);
+			%bot.setImageTrigger(0, 1);
+		}
+	}
 
 	%bot.nextAction = 0; //always update action every tick
 }

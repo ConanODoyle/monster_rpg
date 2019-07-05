@@ -1,0 +1,30 @@
+//// structure ////
+%bot.RPGData = scriptobject with fields defining properties
+- maxDamage
+- armor
+- resist
+- level
+
+- searchType (ScriptObject)
+	- searchFunction
+	- searchRadius
+	- etc...
+
+- attackType (ScriptObject)
+	- attackImage
+	- triggerTime
+	- minRange
+	- maxRange
+
+- botLogicFunc
+- damageCallbackFunc
+
+- botActionFunc
+
+- expReward
+
+//properties directly applied to bot
+- maxYawSpeed
+- maxPitchSpeed
+- scale
+- botDB

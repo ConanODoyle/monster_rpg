@@ -15,7 +15,10 @@ package MRPGBot_DamageCallback
 		if (isObject(%obj.RPGData))
 		{
 			%func = %obj.RPGData.damageCallbackFunc;
-			call(%func, %obj, %sourceObj, %pos, %damage, %damageType);
+			if (isFunction(%func))
+			{
+				call(%func, %obj, %sourceObj, %pos, %damage, %damageType);
+			}
 		}
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
