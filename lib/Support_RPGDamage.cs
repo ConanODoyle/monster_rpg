@@ -11,8 +11,6 @@
 // - resist
 // - level
 
-// - formula:
-
 package MRPG_Damage
 {
 	function Armor::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType)
@@ -35,11 +33,12 @@ function getModifiedDamage(%bot, %proj, %damage)
 	{
 		%physDef = %bot.RPGData.armor - %proj.penetration;
 		%magicDef = %bot.RPGData.resist - %proj.penetration;
-		%levelMod = (100 - %levDiff) * (100 - %levDiff) / 10000;
-		//75 diff = 6.25% damage
-		//50 diff = 25% damage
-		//25 diff = 56.25% damage
-		//15 diff = 72.25% damage
+		%levelMod = (100 - %levDiff) / 100;
+		%levelMod = %levelMod * mSqrt(%levelMod);
+		//75 diff = 12.5% damage
+		//50 diff = 35.36% damage
+		//25 diff = 64.95% damage
+		//15 diff = 78.37% damage
 		//0 diff = 100% damage
 
 		%rawDamage = %proj.damage $= "" ? %proj.getDatablock().directDamage : %proj.damage;
