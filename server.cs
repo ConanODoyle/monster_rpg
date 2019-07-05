@@ -7,6 +7,7 @@ echo("");
 echo("");
 echo("----Executing utils----");
 exec("./util/getClosestObjectToPoint.cs");
+exec("./util/getXFromObject.cs");
 
 echo("");
 echo("");
