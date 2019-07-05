@@ -24,3 +24,5 @@ package MRPGBot_DamageCallback
 	}
 };
 activatePackage(MRPGBot_DamageCallback);
+deactivatePackage(Support_RPGDamage);
+activatePackage(Support_RPGDamage); //ensure that modified damage values come through so that the callback gets the right amt

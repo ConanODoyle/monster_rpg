@@ -24,7 +24,66 @@
 - expReward
 
 //properties directly applied to bot
-- maxYawSpeed
-- maxPitchSpeed
+- maxYawSpeed //affects how fast it turns
+- maxPitchSpeed //affects how fast it looks up/down
 - scale
 - botDB
+
+
+//useful/interesting funcs//
+		getAimLocation() - ()Returns the point the AI is aiming at.
+		getAimObject() - ()Gets the object the AI is targeting.
+		getAimVector() - ()Returns the designated aim vector.
+		getEnergyLevel() -
+		getEnergyPercent() -
+		getLastImpactPosition() -
+		getMoveDestination() - ()Returns the point the AI is set to move to.
+		getMoveObject() - ()Gets the object the AI is following.
+		getMoveTolerance() - ()Gets how close a bot has to be to reach a destination.
+		goToBrick() -
+		hasMethod() -
+		isCloaked() -
+		isCrouched() -
+		isCrouching() - ()
+		isDestroyed() -
+		isDisabled() - True if the state is not Enabled.
+		isEnabled() -
+		isFirstPerson() -
+		isGroundedSport() -
+		isHidden() -
+		isImageFiring() - (int slot)
+		isImageMounted() - (ShapeBaseImageData db)
+		isJetting() - ()
+		isJumping() - ()
+		isMounted() - Are we mounted?
+		isNodeVisible() - (string nodeName)
+		isPilot() -
+		lookAtBrick() -
+		lookAtPlayer() -
+		setAimLocation() - ( Point3F target )Tells the AI to aim at the location provided.
+		setAimObject() - ( GameBase obj )Sets the bot's target object.
+		setAimVector() - ( Point3F )Tells the AI to aim in the direction provided.
+		setEnergyLevel() - (float level)
+		setEngageDistance() - ( float dist )
+		setHeadAngle() - (F32)
+		setHeadAngleSpeed() - (F32 speed)angular speed of head animation
+		setHeadUp() - obj.setHeadUp(bool)
+		setImageAmmo() - (int slot, bool hasAmmo)
+		setImageLoaded() - (int slot, bool loaded)
+		setImageTrigger() - (int slot, bool isTriggered)
+		setJetting() - (bool)
+		setJumping() - (bool)
+		setLookLimits() - (F32 up, F32 down)
+		setMoveDestination() - (Point3F goal)Tells the AI to move to the location provided.
+		setMoveObject() - ( GameBase obj )Sets the bot's follow object.
+		setMoveSlowdown() - (bool)
+		setMoveSpeed() - ( float speed )Sets the move speed for an AI object.
+		setMoveTolerance() - (float tolerance)Sets how close a bot has to be to reach a destination.
+		setMoveX() - ( float speed )Sets strafe movement for an AI object.
+		setMoveY() - ( float speed )Sets forward movement for an AI object.
+		setMoveYaw() - ( float speed )Sets turning movement for an AI object.
+		SetSearchRadius() -
+		SetWanderDistance() -
+		setWorldSpaceMovement() - setWorldSpaceMovement(bool val)
+		smoothWander() -
+		stop() - ()Stop moving.

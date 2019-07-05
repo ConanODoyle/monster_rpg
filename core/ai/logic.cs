@@ -103,7 +103,6 @@ function MRPGBot_simpleAction(%bot)
 	}
 	
 	%data = %bot.RPGData;
-	%searchData = %data.searchType;
 	
 	if (!isObject(%bot.target))
 	{
@@ -145,4 +144,23 @@ function MRPGBot_simpleAction(%bot)
 	}
 
 	%bot.nextAction = 0; //always update action every tick
+}
+
+function MRPGBot_simpleDamageCallback(%bot, %atkObj, %pos, %damage, %damageType)
+{
+	if (%damage <= 0)
+	{
+		return;
+	}
+
+	%attacker = getPlayerFromObject(%atkObj);
+
+	%data = %bot.RPGData;
+	%searchData = %data.searchType;
+
+	if (!isObject(%bot.target) && isObject(%attacker))
+	{
+		%radius = %searchData.searchRadius;
+		if (vectorDist(%attacker))
+	}
 }
