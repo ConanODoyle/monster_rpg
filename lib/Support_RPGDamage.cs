@@ -17,7 +17,11 @@ package MRPG_Damage
 	{
 		if (isObject(%obj.RPGData) && %sourceObj.getClassName() $= "Projectile")
 		{
-			%damage = getModifiedDamage(%obj, %sourceObj, %damage);
+			%damage = getModifiedBotDamage(%obj, %sourceObj, %damage);
+		}
+		else if (isObject(%obj.client))
+		{
+			%damage = getModifiedPlayerDamage(%obj.client, %proj, %damage); //TODO
 		}
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
@@ -25,14 +29,53 @@ package MRPG_Damage
 activatePackage(MRPG_Damage);
 
 
-function getModifiedDamage(%bot, %proj, %damage)
+function getModifiedBotDamage(%bot, %proj, %damage)
 {
-	%levDiff = getMax(0, %bot.RPGData.level - %proj.level);
+	%data = %bot.RPGData;
+	%damage = getModifiedDamage(%proj, %data.level, %data.armor, %data.resist);
+
+	if (%bot.damageFactor $= "")
+	{
+		if (%data.maxDamage > 0)
+		{
+			%bot.damageFactor = %bot.getDatablock().maxDamage / %data.maxDamage;
+		}
+		else
+		{
+			%bot.damageFactor = 1;
+		}
+	}
+	%finalDamage = %damage * %bot.damageFactor * getWord(%bot.getScale(), 2);
+
+	return %finalDamage SPC %damage;
+}
+
+
+function getModifiedPlayerDamage(%cl, %proj, %damage)
+{
+	%damage = getModifiedDamage(%proj, %cl.level, %cl.armor, %cl.resist);
+
+	if (%cl.maxDamage > 0 && isObject(%cl.player))
+	{
+		%cl.damageFactor = %cl.player.getDatablock().maxDamage / %cl.maxDamage;
+	}
+	else
+	{
+		%cl.damageFactor = 1;
+	}
+	%finalDamage = %damage * %cl.damageFactor * getWord(%bot.getScale(), 2);
+
+	return %finalDamage SPC %damage;
+}
+
+function getModifiedDamage(%proj, %level, %armor, %resist)
+{
+	%levDiff = getMax(0, %level - %proj.level);
 	
 	if (%levDiff < 100)
 	{
-		%physDef = %bot.RPGData.armor - %proj.penetration;
-		%magicDef = %bot.RPGData.resist - %proj.penetration;
+		%physDef = %armor - %proj.penetration;
+		%magicDef = %resist - %proj.penetration;
 		%levelMod = (100 - %levDiff) / 100;
 		%levelMod = %levelMod * mSqrt(%levelMod);
 		//75 diff = 12.5% damage
@@ -57,14 +100,5 @@ function getModifiedDamage(%bot, %proj, %damage)
 			%damage = %levelMod * %rawDamage;
 		}
 	}
-
-	if (%bot.RPGData.maxDamage > 0)
-	{
-		if (%bot.damageFactor $= "")
-		{
-			%bot.damageFactor = %bot.getDatablock().maxDamage / %bot.RPGData.maxDamage;
-		}
-		%finalDamage = %damage * %bot.damageFactor * getWord(%bot.getScale(), 2);
-	}
-	return %finalDamage SPC %damage;
+	return %damage;
 }
