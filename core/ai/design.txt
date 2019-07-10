@@ -44,6 +44,7 @@
 - maxPitchSpeed //affects how fast it looks up/down
 - scale
 - botDB
+- canJump
 
 
 //useful/interesting funcs//

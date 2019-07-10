@@ -54,6 +54,7 @@ $RPGData_Goblin.maxYawSpeed = 10;
 $RPGData_Goblin.maxPitchSpeed = 10;
 $RPGData_Goblin.scale = "1 1 1";
 $RPGData_Goblin.botDB = "PlayerStandardArmor";
+$RPGData_Goblin.canJump = 1;
 
 
 

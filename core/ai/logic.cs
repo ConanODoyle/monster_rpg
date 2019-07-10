@@ -168,7 +168,7 @@ function MRPGBot_simpleAction(%bot)
 		}
 		%bot.setAimObject(%bot.target);
 
-		if (getWord(%bot.target.position, 2) > getWord(%bot.position, 2) + 1.5 && getRandom() < 0.01)
+		if (%bot.canJump && getWord(%bot.target.position, 2) > getWord(%bot.position, 2) + 1.5 && getRandom() < 0.01)
 		{
 			%bot.setJumping(1);
 		}
@@ -188,19 +188,19 @@ function MRPGBot_simpleAction(%bot)
 			%bot.setMoveX(0);
 			if (%attackData.backingAttack)
 			{
-				if (%bot.nextBump < $Sim::Time)
+				if (%bot.nextBump < $Sim::Time) //force aiming visual update for immobile bots
 				{
 					%bot.addVelocity("0 0 0.1");
-					%bot.nextBump = $Sim::Time + 0.5;
+					%bot.nextBump = $Sim::Time + 0.2;
 				}
 				%bot.setImageTrigger(0, 1);
 			}
 			else
 			{
-				if (%bot.nextBump < $Sim::Time)
+				if (%bot.nextBump < $Sim::Time) //force aiming visual update for immobile bots
 				{
 					%bot.addVelocity("0 0 0.1");
-					%bot.nextBump = $Sim::Time + 0.5;
+					%bot.nextBump = $Sim::Time + 0.2;
 				}
 				%bot.setImageTrigger(0, 0);
 			}
@@ -223,10 +223,10 @@ function MRPGBot_simpleAction(%bot)
 			}
 			%bot.setMoveX(0);
 				
-			if (%bot.nextBump < $Sim::Time)
+			if (%bot.nextBump < $Sim::Time) //force aiming visual update for immobile bots
 			{
 				%bot.addVelocity("0 0 0.1");
-				%bot.nextBump = $Sim::Time + 0.5;
+				%bot.nextBump = $Sim::Time + 0.2;
 			}
 			%bot.setImageTrigger(0, 1);
 		}

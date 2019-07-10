@@ -21,6 +21,7 @@ function MRPGBot_Spawn(%brick, %RPGData, %disableAI)
 		spawnBrick = %brick;
 		maxYawSpeed = %RPGData.maxYawSpeed;
 		maxPitchSpeed = %RPGData.maxPitchSpeed;
+		canJump = %RPGData.canJump;
 		spawnBrick = %brick;
 		name = %RPGData.name;
 	};
