@@ -1,5 +1,6 @@
 //// structure ////
 %bot.RPGData = scriptobject with fields defining properties
+- name
 - maxDamage
 - armor
 - resist
@@ -15,15 +16,22 @@
 	- triggerTime
 	- minRange
 	- maxRange
+	- stopRange
+	- backingAttack
+
+- wanderSpeed
+- leashDistance
 
 - botLogicFunc
-- damageCallbackFunc
-
 - botActionFunc
+- damageCallbackFunc
 
 - expReward
 
 //properties directly applied to bot
+- maxForwardSpeed
+- maxBackwardSpeed
+- maxSideSpeed
 - maxYawSpeed //affects how fast it turns
 - maxPitchSpeed //affects how fast it looks up/down
 - scale

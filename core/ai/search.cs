@@ -32,7 +32,7 @@ function MRPGBot_radiusSearch(%bot)
 	for (%i = 0; %i < ClientGroup.getCount(); %i++)
 	{
 		%pl = ClientGroup.getObject(%i).player;
-		if (vectorDist(%pos, %pl.getPosition) <= %data.searchRadius) //within range
+		if (vectorDist(%pos, %pl.getPosition()) <= %data.searchRadius) //within range
 		{
 			if (%data.requireLOS) //check for line of sight (bot eye to player)
 			{

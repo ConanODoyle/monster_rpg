@@ -16,8 +16,14 @@ function MRPGBot_Spawn(%brick, %RPGData)
 		spawnBrick = %brick;
 		maxYawSpeed = %RPGData.maxYawSpeed;
 		maxPitchSpeed = %RPGData.maxPitchSpeed;
+		spawnBrick = %brick;
+		name = %RPGData.name;
 	};
+	%bot.setMaxForwardSpeed(%RPGData.maxForwardSpeed);
+	%bot.setMaxBackwardSpeed(%RPGData.maxBackwardSpeed);
+	%bot.setMaxSideSpeed(%RPGData.maxSideSpeed);
 	%bot.setScale(%RPGData.scale);
+	%bot.mountImage(%RPGData.attackType.attackImage, 0);
 
 	%brick.hBot = %bot;
 	%brick.onBotSpawn();
