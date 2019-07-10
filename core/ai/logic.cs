@@ -99,22 +99,28 @@ function MRPGBot_simpleLogic(%bot)
 		{
 			%val = call(%searchData.searchFunction, %bot);
 			%closest = getClosestObjectToPoint(%val, %bot.getPosition());
-			if (%bot.target != %closest)
+			if (%bot.target != %closest) //closest target (if existing) is not the current target
 			{
-				%bot.reCheckTicks++;
-				if (%bot.reCheckTicks > 10)
+				if (!%bot.isLosingCurrentTarget) //start timer for losing target, if not currently timing it
 				{
-					%bot.target = "";
-					%bot.reCheckTicks = 0;
+					%bot.targetLossTime = $Sim::Time;
+					%bot.isLosingCurrentTarget = 1;
+				}
+
+				if ($Sim::Time - %bot.targetLossTime > %data.resetTargetTime) //reset target
+				{
+					%bot.target = %closest;
+					%bot.isLosingCurrentTarget = 0;
 				}
 			}
-			else
+			else //closest target is current target, reset timer for losing target
 			{
-				%bot.reCheckTicks = 0;
+				%bot.isLosingCurrentTarget = 0;
+				%bot.targetLossTime = "";
 			}
 		}
 	}
-	%bot.nextThink = ($Sim::Time + 1 | 0) | 0;
+	%bot.nextThink = ($Sim::Time + (%data.thinkTime >= 1 ? %data.thinkTime : 1) | 0) | 0;
 }
 
 function MRPGBot_simpleAction(%bot)
@@ -150,16 +156,16 @@ function MRPGBot_simpleAction(%bot)
 		}
 		%bot.setAimObject(%bot.target);
 
-		%attackType = %data.attackType;
-		%maxRange = %attackType.maxRange;
-		%minRange = %attackType.minRange;
+		%attackData = %data.attackType;
+		%maxRange = %attackData.maxRange;
+		%minRange = %attackData.minRange;
 
 		%dist = vectorDist(%bot.getPosition(), %bot.target.getPosition());
 		if (%dist < %minRange)
 		{
 			%bot.setMoveY(-1);
 			%bot.setMoveX(0);
-			if (%attackType.backingAttack)
+			if (%attackData.backingAttack)
 			{
 				%bot.setImageTrigger(0, 1);
 			}
@@ -176,7 +182,7 @@ function MRPGBot_simpleAction(%bot)
 		}
 		else
 		{
-			if (%dist < %attackType.stopRange)
+			if (%dist < %attackData.stopRange)
 			{
 				%bot.setMoveY(0);
 			}
