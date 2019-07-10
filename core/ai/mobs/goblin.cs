@@ -34,6 +34,8 @@ $RPGData_Goblin.maxDamage = 80;
 $RPGData_Goblin.armor = 0;
 $RPGData_Goblin.resist = 0;
 $RPGData_Goblin.level = -500;
+$RPGData_Goblin.thinkTime = 1;
+$RPGData_Goblin.resetTargetTime = 10;
 
 $RPGData_Goblin.searchType = "NearRadiusLOSSearchType";
 
@@ -63,6 +65,8 @@ $RPGData_GoblinArcher.maxDamage = 80;
 $RPGData_GoblinArcher.armor = 0;
 $RPGData_GoblinArcher.resist = 0;
 $RPGData_GoblinArcher.level = -500;
+$RPGData_GoblinArcher.thinkTime = 1;
+$RPGData_GoblinArcher.resetTargetTime = 4;
 
 $RPGData_GoblinArcher.searchType = "NearRadiusLOSSearchType";
 
@@ -86,11 +90,12 @@ $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
 
 datablock ProjectileData(goblinSwordProjectile : swordProjectile)
 {
-	directDamage = 2.85;
+	directDamage = 3;
 };
 
 datablock ShapeBaseImageData(goblinSwordImage : swordImage)
 {
+	colorShiftColor = "0.47 0.33 0.33 1";
 	projectile = goblinSwordProjectile;
 
 	stateTimeoutValue[3]		= 2;
@@ -106,6 +111,7 @@ datablock ProjectileData(goblinArrowProjectile : arrowProjectile)
 
 datablock ShapeBaseImageData(goblinBowImage : BowImage)
 {
+	colorShiftColor = "0.53 0.43 0 1";
 	projectile = goblinArrowProjectile;
 
 	stateTimeoutValue[3]		= 3;
