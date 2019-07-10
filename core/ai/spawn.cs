@@ -26,6 +26,9 @@ function MRPGBot_Spawn(%brick, %RPGData)
 	%bot.mountImage(%RPGData.attackType.attackImage, 0);
 
 	%brick.hBot = %bot;
+	%bot.isBot = 1;
+	%bot.client = %bot;
+	%bot.player = %bot;
 	%brick.onBotSpawn();
 
 	%bot.setTransform(%spawn);
