@@ -77,9 +77,13 @@ function MRPGBot_simpleLogic(%bot)
 		{
 			%bot.target = "";
 		}
-		else if (%data.autoCutoffRange !$= "" && vectorDist(%bot.position, %bot.target.position) > %data.autoCutoffRange)
+		else if (%data.autoCutoffRange !$= "")
 		{
-			%bot.target = "";
+			talk(vectorDist(%bot.position, %bot.target.position));
+			if (vectorDist(%bot.position, %bot.target.position) > %data.autoCutoffRange)
+			{
+				%bot.target = "";
+			}
 		}
 	}
 
@@ -249,18 +253,22 @@ function MRPGBot_simpleDamageCallback(%bot, %atkObj, %pos, %damage, %damageType)
 	{
 		%bot.lastAttackedBy_[%attacker] = $Sim::Time;
 	}
-	talk(%attacker);
-
+	
 	%data = %bot.RPGData;
 	%searchData = %data.searchType;
 
-	if (!isObject(%bot.target) && isObject(%attacker))
+	if (%data.autoCutoffRange !$= "" && isObject(%attacker) && 
+		vectorDist(%attacker.position, %bot.position) > %data.autoCutoffRange)
+	{
+		return;
+	}
+	else if (!isObject(%bot.target) && isObject(%attacker))
 	{
 		%bot.target = %attacker;
 	}
 	else if (isObject(%bot.target) && isObject(%attacker))
 	{
-		if (%bot.lastAttackedBy_[%bot.target] + 5 < $Sim::Time)
+		if (%bot.lastAttackedBy_[%bot.target] + 5 < $Sim::Time || %damage > %bot.RPGData.maxDamage / 5)
 		{
 			%bot.target = %attacker;
 		}
