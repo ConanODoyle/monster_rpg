@@ -91,6 +91,7 @@ $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
 datablock ProjectileData(goblinSwordProjectile : swordProjectile)
 {
 	directDamage = 3;
+	type = "Physical";
 };
 
 datablock ShapeBaseImageData(goblinSwordImage : swordImage)
@@ -107,6 +108,7 @@ datablock ShapeBaseImageData(goblinSwordImage : swordImage)
 datablock ProjectileData(goblinArrowProjectile : arrowProjectile)
 {
 	directDamage = 2;
+	type = "Physical";
 };
 
 datablock ShapeBaseImageData(goblinBowImage : BowImage)
