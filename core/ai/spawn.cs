@@ -1,4 +1,4 @@
-function MRPGBot_Spawn(%brick, %RPGData)
+function MRPGBot_Spawn(%brick, %RPGData, %disableAI)
 {
 	if (!isObject($MRPG_AISet))
 	{
@@ -11,7 +11,7 @@ function MRPGBot_Spawn(%brick, %RPGData)
 		%brick.hBot.delete();
 	}
 
-	%pos = vectorAdd(%brick.getPosition(), "0 0 " @ getWord(%RPGData.scale, 2) * 3 / 2);
+	%pos = vectorAdd(%brick.getPosition(), "0 0 1"); // @ getWord(%RPGData.scale, 2) * 3 / 2);
 	%rot = getWords(%brick.getSpawnPoint(), 3, 6);
 	%spawn = %pos SPC %rot;
 
@@ -40,8 +40,11 @@ function MRPGBot_Spawn(%brick, %RPGData)
 	%bot.setMoveTolerance(0.5);
 	%bot.spawnExplosion("spawnProjectile", getWord(%RPGData.scale, 2));
 
-	$MRPG_AISet.add(%bot);
-	%bot.nextThink = ($Sim::Time + 3 | 0) | 0;
+	if (!%disableAI)
+	{
+		$MRPG_AISet.add(%bot);
+		%bot.nextThink = ($Sim::Time + 3 | 0) | 0;
+	}
 }
 
 
@@ -78,8 +81,15 @@ function spawnTick(%idx)
 		%curr = MRPG_SpawnSet.getObject(%idx);
 
 		%name = strReplace(getSubStr(%curr, 1, 100), "_", " ");
+		if (%name $= "")
+		{
+			%idx++;
+			continue;
+		}
+
 		%dataType = getWord(%name, 0);
 		%time = getMax(1, getWord(%name, 1));
+		%disableAI = getWord(%name, 2);
 		if (isObject(%data = $RPGData_[%dataType]))
 		{
 			if (isObject(%curr.hBot))
@@ -88,7 +98,7 @@ function spawnTick(%idx)
 			}
 			else if ($Sim::Time - %curr.lastHadBot > %time)
 			{
-				MRPGBot_Spawn(%curr, %data);
+				MRPGBot_Spawn(%curr, %data, %disableAI);
 				%curr.lastHadBot = $Sim::Time;
 			}
 		}
@@ -107,7 +117,71 @@ package MRPG_SpawnPackage
 		{
 			MRPG_SpawnSet.add(%obj);
 		}
+		
 		return parent::onAdd(%this, %obj);
+	}
+
+	function serverCmdSetWrenchData(%cl, %data)
+	{
+		%brick = %client.wrenchBrick;
+		if (isObject(%brick))
+		{
+			%name = %brick.getName();
+		}
+
+		%ret = parent::serverCmdSetWrenchData(%cl, %data);
+
+		if (isObject(%brick) && %brick.getName() !$= %name && isObject(%brick.hBot))
+		{
+			%brick.hBot.delete();
+			%cl.centerprint("Deleted Monster RPG Bot due to brick name change");
+		}
+
+		return %ret;
 	}
 };
 activatePackage(MRPG_SpawnPackage);
+
+
+
+datablock fxDTSBrickData (BrickMRPGBotSpawn_SmallData)
+{
+	brickFile = "Add-ons/Bot_Hole/4xspawn.blb";
+	category = "Special";
+	subCategory = "Monster RPG";
+	uiName = "Small Monster Spawn";
+	iconName = "";
+
+	orientationfix = 1;
+	indestructable = 1;
+
+	isMRPGSpawn = 1;
+};
+
+datablock fxDTSBrickData (BrickMRPGBotSpawn_MediumData)
+{
+	brickFile = "Add-ons/Bot_Hole/6xspawn.blb";
+	category = "Special";
+	subCategory = "Monster RPG";
+	uiName = "Medium Monster Spawn";
+	iconName = "";
+
+	orientationfix = 1;
+	indestructable = 1;
+
+	isMRPGSpawn = 1;
+};
+
+datablock fxDTSBrickData (BrickMRPGBotSpawn_LargeData)
+{
+	brickFile = "Add-ons/Bot_Hole/8xspawn.blb";
+	category = "Special";
+	subCategory = "Monster RPG";
+	uiName = "Large Monster Spawn";
+	iconName = "";
+
+	orientationfix = 1;
+	indestructable = 1;
+
+	isMRPGSpawn = 1;
+};
