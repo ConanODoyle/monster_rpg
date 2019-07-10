@@ -129,6 +129,14 @@ function MRPGBot_simpleAction(%bot)
 	{
 		return;
 	}
+	else if (%bot.isDisabled())
+	{
+		%bot.setImageTrigger(0, 0);
+		%bot.setImageTrigger(1, 0);
+		%bot.setImageTrigger(2, 0);
+		%bot.setImageTrigger(3, 0);
+		return;
+	}
 	
 	%data = %bot.RPGData;
 	
@@ -146,6 +154,10 @@ function MRPGBot_simpleAction(%bot)
 		{
 			%bot.setAimObject("");
 		}
+		%bot.setImageTrigger(0, 0);
+		%bot.setImageTrigger(1, 0);
+		%bot.setImageTrigger(2, 0);
+		%bot.setImageTrigger(3, 0);
 	}
 	else
 	{
@@ -176,10 +188,20 @@ function MRPGBot_simpleAction(%bot)
 			%bot.setMoveX(0);
 			if (%attackData.backingAttack)
 			{
+				if (%bot.nextBump < $Sim::Time)
+				{
+					%bot.addVelocity("0 0 0.1");
+					%bot.nextBump = $Sim::Time + 0.5;
+				}
 				%bot.setImageTrigger(0, 1);
 			}
 			else
 			{
+				if (%bot.nextBump < $Sim::Time)
+				{
+					%bot.addVelocity("0 0 0.1");
+					%bot.nextBump = $Sim::Time + 0.5;
+				}
 				%bot.setImageTrigger(0, 0);
 			}
 		}
@@ -200,6 +222,12 @@ function MRPGBot_simpleAction(%bot)
 				%bot.setMoveY(0.5);
 			}
 			%bot.setMoveX(0);
+				
+			if (%bot.nextBump < $Sim::Time)
+			{
+				%bot.addVelocity("0 0 0.1");
+				%bot.nextBump = $Sim::Time + 0.5;
+			}
 			%bot.setImageTrigger(0, 1);
 		}
 	}

@@ -80,7 +80,7 @@ function spawnTick(%idx)
 		}
 		%curr = MRPG_SpawnSet.getObject(%idx);
 
-		%name = strReplace(getSubStr(%curr, 1, 100), "_", " ");
+		%name = strReplace(getSubStr(%curr.getName(), 1, 100), "_", " ");
 		if (%name $= "")
 		{
 			%idx++;
@@ -106,7 +106,7 @@ function spawnTick(%idx)
 		%idx++;
 	}
 
-	$masterSpawnSchedule = schedule(1, 0, logicTick, %idx);
+	$masterSpawnSchedule = schedule(1, 0, spawnTick, %idx);
 }
 
 package MRPG_SpawnPackage 

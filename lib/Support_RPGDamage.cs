@@ -21,7 +21,7 @@ package MRPG_DamagePackage
 		}
 		else if (isObject(%obj.client))
 		{
-			%damage = getModifiedPlayerDamage(%obj.client, %proj, %damage); //TODO
+			%damage = getModifiedPlayerDamage(%obj.client, %sourceObj, %damage); //TODO
 		}
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
@@ -45,7 +45,7 @@ function getModifiedBotDamage(%bot, %proj, %damage)
 			%bot.damageFactor = 1;
 		}
 	}
-	%finalDamage = %damage * %bot.damageFactor * getWord(%bot.getScale(), 2);
+	%finalDamage = %damage * %bot.damageFactor * getWord(%bot.getScale(), 2); //negates scale dmg reduction in vanilla code
 
 	return %finalDamage SPC %damage;
 }
@@ -53,9 +53,14 @@ function getModifiedBotDamage(%bot, %proj, %damage)
 
 function getModifiedPlayerDamage(%cl, %proj, %damage)
 {
+	if (!isObject(%cl.player))
+	{
+		return %damage;
+	}
+
 	%damage = getModifiedDamage(%proj, %cl.level, %cl.armor, %cl.resist);
 
-	if (%cl.maxDamage > 0 && isObject(%cl.player))
+	if (%cl.maxDamage > 0)
 	{
 		%cl.damageFactor = %cl.player.getDatablock().maxDamage / %cl.maxDamage;
 	}
@@ -63,7 +68,7 @@ function getModifiedPlayerDamage(%cl, %proj, %damage)
 	{
 		%cl.damageFactor = 1;
 	}
-	%finalDamage = %damage * %cl.damageFactor * getWord(%bot.getScale(), 2);
+	%finalDamage = %damage * %cl.damageFactor * getWord(%cl.player.getScale(), 2); //negates scale dmg reduction in vanilla code
 
 	return %finalDamage SPC %damage;
 }
@@ -86,6 +91,12 @@ function getModifiedDamage(%proj, %level, %armor, %resist)
 
 		%rawDamage = %proj.damage $= "" ? %proj.getDatablock().directDamage : %proj.damage;
 		%type = %proj.type $= "" ? %proj.getDatablock().type : %proj.type;
+
+		// talk("levDiff: " @ %levDiff);
+		// talk("physDef: " @ %physDef);
+		// talk("magicDef: " @ %magicDef);
+		// talk("levelMod: " @ %levelMod);
+		// talk("rawDamage: " @ %rawDamage SPC " proj:["@ %proj.damage @ "," @ %proj.getDatablock().directDamage @ "]");
 
 		if (%type $= "Magic")
 		{

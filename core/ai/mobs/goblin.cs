@@ -70,7 +70,7 @@ $RPGData_GoblinArcher.resetTargetTime = 4;
 
 $RPGData_GoblinArcher.searchType = "NearRadiusLOSSearchType";
 
-$RPGData_GoblinArcher.attackType = "GoblinAttackType";
+$RPGData_GoblinArcher.attackType = "GoblinRangedAttackType";
 
 $RPGData_GoblinArcher.botLogicFunc = "MRPG_simpleLogic";
 $RPGData_GoblinArcher.botActionFunc = "MRPG_simpleAction";
