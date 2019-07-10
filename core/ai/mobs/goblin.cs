@@ -2,8 +2,8 @@ if (!isObject($RPGData_Goblin))
 {
 	$RPGData_Goblin = new ScriptObject(RPGDataObject) {};
 	$RPGData_GoblinArcher = new ScriptObject(RPGDataObject) {};
-	MissionCleanup.add($RPGData_Goblin);
-	MissionCleanup.add($RPGData_GoblinArcher);
+	schedule(1000, 0, eval, "MissionCleanup.add($RPGData_Goblin);");
+	schedule(1000, 0, eval, "MissionCleanup.add($RPGData_GoblinArcher);");
 }
 
 if (!isObject($RPGData_GoblinAttack))
@@ -25,8 +25,8 @@ if (!isObject($RPGData_GoblinAttack))
 		backingAttack = 1;
 	};
 
-	MissionCleanup.add($RPGData_GoblinAttack);
-	MissionCleanup.add($RPGData_GoblinRangedAttack);
+	schedule(1000, 0, eval, "MissionCleanup.add($RPGData_GoblinAttack);");
+	schedule(1000, 0, eval, "MissionCleanup.add($RPGData_GoblinRangedAttack);");
 }
 
 $RPGData_Goblin.name = "Goblin";

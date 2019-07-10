@@ -16,7 +16,7 @@
 if (!isObject(MRPG_AISet))
 {
 	$MRPG_AISet = new SimSet(MRPG_AISet) {};
-	MissionCleanup.add($MRPG_AISet);
+	schedule(1000, 0, eval, "MissionCleanup.add($MRPG_AISet);");
 }
 
 
@@ -155,6 +155,15 @@ function MRPGBot_simpleAction(%bot)
 			%bot.armAnim = "armReadyRight";
 		}
 		%bot.setAimObject(%bot.target);
+
+		if (getWord(%bot.target.position, 2) > getWord(%bot.position, 2) + 1.5 && getRandom() < 0.01)
+		{
+			%bot.setJumping(1);
+		}
+		else
+		{
+			%bot.setJumping(0);
+		}
 
 		%attackData = %data.attackType;
 		%maxRange = %attackData.maxRange;

@@ -21,7 +21,7 @@ if (!isObject(SearchTypes))
 	SearchTypes.add(new ScriptObject(FarRadiusFOVSearchType)    { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 90; searchFOV = 160; } );
 	SearchTypes.add(new ScriptObject(FOVSearchType)             { searchFunction = "MRPGBot_radiusFOVSearch"; searchRadius = 1000; searchFOV = 160; } );
 	
-	MissionCleanup.add(SearchTypes);
+	schedule(1000, 0, eval, "MissionCleanup.add(SearchTypes);");
 }
 
 function MRPGBot_radiusSearch(%bot)

@@ -53,7 +53,7 @@ function MRPGBot_Spawn(%brick, %RPGData, %disableAI)
 if (!isObject(MRPG_SpawnSet))
 {
 	$MRPG_SpawnSet = new SimSet(MRPG_SpawnSet) {};
-	MissionCleanup.add($MRPG_SpawnSet);
+	schedule(1000, 0, eval, "MissionCleanup.add($MRPG_SpawnSet);");
 }
 
 
@@ -117,7 +117,7 @@ package MRPG_SpawnPackage
 		{
 			MRPG_SpawnSet.add(%obj);
 		}
-		
+
 		return parent::onAdd(%this, %obj);
 	}
 
