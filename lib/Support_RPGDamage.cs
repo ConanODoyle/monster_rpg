@@ -15,13 +15,18 @@ package MRPG_DamagePackage
 {
 	function Armor::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType)
 	{
+		if (%damageType == $DamageType::Radius || %damageType == %sourceObj.getDatablock().radiusDamageType)
+		{
+			%isRadius = 1;
+		}
+
 		if (isObject(%obj.RPGData) && %sourceObj.getClassName() $= "Projectile")
 		{
-			%damage = getModifiedBotDamage(%obj, %sourceObj, %damage);
+			%damage = getModifiedBotDamage(%obj, %sourceObj, %damage, %isRadius);
 		}
 		else if (isObject(%obj.client))
 		{
-			%damage = getModifiedPlayerDamage(%obj.client, %sourceObj, %damage); //TODO
+			%damage = getModifiedPlayerDamage(%obj.client, %sourceObj, %damage, %isRadius); //TODO
 		}
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
@@ -29,10 +34,10 @@ package MRPG_DamagePackage
 activatePackage(MRPG_DamagePackage);
 
 
-function getModifiedBotDamage(%bot, %proj, %damage)
+function getModifiedBotDamage(%bot, %proj, %damage, %isRadius)
 {
 	%data = %bot.RPGData;
-	%damage = getModifiedDamage(%proj, %data.level, %data.armor, %data.resist);
+	%damage = getModifiedDamage(%proj, %data.level, %data.armor, %data.resist, %damage, %isRadius);
 
 	if (%bot.damageFactor $= "")
 	{
@@ -51,14 +56,14 @@ function getModifiedBotDamage(%bot, %proj, %damage)
 }
 
 
-function getModifiedPlayerDamage(%cl, %proj, %damage)
+function getModifiedPlayerDamage(%cl, %proj, %damage, %isRadius)
 {
 	if (!isObject(%cl.player))
 	{
 		return %damage;
 	}
 
-	%damage = getModifiedDamage(%proj, %cl.level, %cl.armor, %cl.resist);
+	%damage = getModifiedDamage(%proj, %cl.level, %cl.armor, %cl.resist, %damage, %isRadius);
 
 	if (%cl.maxDamage > 0)
 	{
@@ -73,7 +78,7 @@ function getModifiedPlayerDamage(%cl, %proj, %damage)
 	return %finalDamage SPC %damage;
 }
 
-function getModifiedDamage(%proj, %level, %armor, %resist)
+function getModifiedDamage(%proj, %level, %armor, %resist, %damage, %isRadius)
 {
 	%levDiff = getMax(0, %level - %proj.level);
 	
@@ -89,8 +94,16 @@ function getModifiedDamage(%proj, %level, %armor, %resist)
 		//15 diff = 78.37% damage
 		//0 diff = 100% damage
 
-		%rawDamage = %proj.damage $= "" ? %proj.getDatablock().directDamage : %proj.damage;
-		%type = %proj.type $= "" ? %proj.getDatablock().type : %proj.type;
+		%projDB = %proj.getDatablock();
+		if (%isRadius)
+		{
+			%rawDamage = %damage;
+		}
+		else
+		{
+			%rawDamage = %proj.damage $= "" ? (%projDB.directDamage ? %projDB.directDamage : %damage) : %proj.damage;
+		}
+		%type = %proj.type $= "" ? %projDB.type : %proj.type;
 
 		// talk("levDiff: " @ %levDiff);
 		// talk("physDef: " @ %physDef);
