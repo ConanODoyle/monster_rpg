@@ -8,6 +8,7 @@ echo("");
 echo("----Executing utils----");
 exec("./util/getClosestObjectToPoint.cs");
 exec("./util/getXFromObject.cs");
+exec("./util/smallcat.cs");
 
 echo("");
 echo("");
