@@ -9,7 +9,7 @@ if (!isObject($RPGData_Goblin))
 if (!isObject($RPGData_GoblinAttack))
 {
 	$RPGData_GoblinAttack = new ScriptObject(GoblinAttackType) {
-		attackImage = "SwordImage";
+		attackImage = "goblinSwordImage";
 		triggerTime = "1 1";
 		minRange = 0;
 		maxRange = 4;
@@ -17,7 +17,7 @@ if (!isObject($RPGData_GoblinAttack))
 	};
 
 	$RPGData_GoblinRangedAttack = new ScriptObject(GoblinRangedAttackType) {
-		attackImage = "bowImage";
+		attackImage = "goblinBowImage";
 		triggerTime = "1 1";
 		minRange = 0;
 		maxRange = 18;
@@ -81,3 +81,32 @@ $RPGData_GoblinArcher.maxYawSpeed = 5;
 $RPGData_GoblinArcher.maxPitchSpeed = 5;
 $RPGData_GoblinArcher.scale = "1 1 1";
 $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
+
+
+
+datablock ProjectileData(goblinSwordProjectile : swordProjectile)
+{
+	directDamage = 2.85;
+};
+
+datablock ShapeBaseImageData(goblinSwordImage : swordImage)
+{
+	projectile = goblinSwordProjectile;
+
+	stateTimeoutValue[3]		= 2;
+};
+
+
+
+
+datablock ProjectileData(goblinArrowProjectile : arrowProjectile)
+{
+	directDamage = 2;
+};
+
+datablock ShapeBaseImageData(goblinBowImage : BowImage)
+{
+	projectile = goblinArrowProjectile;
+
+	stateTimeoutValue[3]		= 3;
+};
