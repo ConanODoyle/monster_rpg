@@ -29,6 +29,7 @@
 
 - wanderSpeed
 - leashDistance
+- autoCutoffRange //automatically reset target if beyond this range
 
 - botLogicFunc
 - botActionFunc

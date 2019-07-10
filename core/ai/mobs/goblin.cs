@@ -41,6 +41,10 @@ $RPGData_Goblin.searchType = "NearRadiusLOSSearchType";
 
 $RPGData_Goblin.attackType = "GoblinAttackType";
 
+// $RPGData_Goblin.wanderSpeed = 10;
+// $RPGData_Goblin.leashDistance = 10;
+$RPGData_Goblin.autoCutoffRange = 40;
+
 $RPGData_Goblin.botLogicFunc = "MRPG_simpleLogic";
 $RPGData_Goblin.botActionFunc = "MRPG_simpleAction";
 $RPGData_Goblin.damageCallbackFunc = "MRPG_simpleDamageCallback";
@@ -72,6 +76,10 @@ $RPGData_GoblinArcher.resetTargetTime = 4;
 $RPGData_GoblinArcher.searchType = "RadiusLOSSearchType";
 
 $RPGData_GoblinArcher.attackType = "GoblinRangedAttackType";
+
+// $RPGData_Goblin.wanderSpeed = 10;
+// $RPGData_Goblin.leashDistance = 10;
+// $RPGData_Goblin.autoCutoffRange = 40;
 
 $RPGData_GoblinArcher.botLogicFunc = "MRPG_simpleLogic";
 $RPGData_GoblinArcher.botActionFunc = "MRPG_simpleAction";

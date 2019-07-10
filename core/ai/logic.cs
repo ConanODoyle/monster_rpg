@@ -71,11 +71,18 @@ function MRPGBot_simpleLogic(%bot)
 	%data = %bot.RPGData;
 	%searchData = %data.searchType;
 	
-	if (isObject(%bot.target) && %bot.target.isDisabled())
+	if (isObject(%bot.target))
 	{
-		%bot.target = "";
+		if (%bot.target.isDisabled())
+		{
+			%bot.target = "";
+		}
+		else if (%data.autoCutoffRange !$= "" && vectorDist(%bot.position, %bot.target.position) > %data.autoCutoffRange)
+		{
+			%bot.target = "";
+		}
 	}
-	
+
 	if (!isObject(%bot.target))
 	{
 		if (isFunction(%searchData.searchFunction))
@@ -94,7 +101,7 @@ function MRPGBot_simpleLogic(%bot)
 		}
 	}
 	else if (isObject(%bot.target))
-	{
+	{	
 		if (isFunction(%searchData.searchFunction))
 		{
 			%val = call(%searchData.searchFunction, %bot);
@@ -131,10 +138,7 @@ function MRPGBot_simpleAction(%bot)
 	}
 	else if (%bot.isDisabled())
 	{
-		%bot.setImageTrigger(0, 0);
-		%bot.setImageTrigger(1, 0);
-		%bot.setImageTrigger(2, 0);
-		%bot.setImageTrigger(3, 0);
+		clearTriggers(%bot);
 		return;
 	}
 	
@@ -154,10 +158,7 @@ function MRPGBot_simpleAction(%bot)
 		{
 			%bot.setAimObject("");
 		}
-		%bot.setImageTrigger(0, 0);
-		%bot.setImageTrigger(1, 0);
-		%bot.setImageTrigger(2, 0);
-		%bot.setImageTrigger(3, 0);
+		clearTriggers(%bot);
 	}
 	else
 	{
@@ -168,7 +169,8 @@ function MRPGBot_simpleAction(%bot)
 		}
 		%bot.setAimObject(%bot.target);
 
-		if (%bot.canJump && getWord(%bot.target.position, 2) > getWord(%bot.position, 2) + 1.5 && getRandom() < 0.01)
+		%zDiff = getWord(%bot.target.position, 2) - getWord(%bot.position, 2);
+		if (%bot.canJump && %zDiff > 1.2 && getRandom() < 0.08 * %zDiff)
 		{
 			%bot.setJumping(1);
 		}
@@ -253,3 +255,15 @@ function MRPGBot_simpleAction(%bot)
 // 		if (vectorDist(%attacker))
 // 	}
 // }
+
+
+
+
+
+function clearTriggers(%bot)
+{	
+	%bot.setImageTrigger(0, 0);
+	%bot.setImageTrigger(1, 0);
+	%bot.setImageTrigger(2, 0);
+	%bot.setImageTrigger(3, 0);
+}
