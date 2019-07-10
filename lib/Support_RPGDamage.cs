@@ -11,7 +11,7 @@
 // - resist
 // - level
 
-package MRPG_Damage
+package MRPG_DamagePackage
 {
 	function Armor::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType)
 	{
@@ -26,7 +26,7 @@ package MRPG_Damage
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
 };
-activatePackage(MRPG_Damage);
+activatePackage(MRPG_DamagePackage);
 
 
 function getModifiedBotDamage(%bot, %proj, %damage)
