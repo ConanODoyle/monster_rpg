@@ -16,7 +16,7 @@
 	- triggerTime
 	- minRange
 	- maxRange
-	- stopRange
+	- stopRange //stops moving closer under this range
 	- backingAttack
 
 - wanderSpeed
