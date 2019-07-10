@@ -237,24 +237,35 @@ function MRPGBot_simpleAction(%bot)
 	%bot.nextAction = 0; //always update action every tick
 }
 
-// function MRPGBot_simpleDamageCallback(%bot, %atkObj, %pos, %damage, %damageType)
-// {
-// 	if (%damage <= 0)
-// 	{
-// 		return;
-// 	}
+function MRPGBot_simpleDamageCallback(%bot, %atkObj, %pos, %damage, %damageType)
+{
+	if (%damage <= 0)
+	{
+		return;
+	}
 
-// 	%attacker = getPlayerFromObject(%atkObj);
+	%attacker = getPlayerFromObject(%atkObj);
+	if (isObject(%attacker))
+	{
+		%bot.lastAttackedBy_[%attacker] = $Sim::Time;
+	}
+	talk(%attacker);
 
-// 	%data = %bot.RPGData;
-// 	%searchData = %data.searchType;
+	%data = %bot.RPGData;
+	%searchData = %data.searchType;
 
-// 	if (!isObject(%bot.target) && isObject(%attacker))
-// 	{
-// 		%radius = %searchData.searchRadius;
-// 		if (vectorDist(%attacker))
-// 	}
-// }
+	if (!isObject(%bot.target) && isObject(%attacker))
+	{
+		%bot.target = %attacker;
+	}
+	else if (isObject(%bot.target) && isObject(%attacker))
+	{
+		if (%bot.lastAttackedBy_[%bot.target] + 5 < $Sim::Time)
+		{
+			%bot.target = %attacker;
+		}
+	}
+}
 
 
 

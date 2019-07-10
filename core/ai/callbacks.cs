@@ -8,7 +8,7 @@
 
 // - etc...
 
-package MRPGBot_DamageCallback
+package MRPGBot_DamageCallbackPackage
 {
 	function Armor::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType)
 	{
@@ -23,6 +23,6 @@ package MRPGBot_DamageCallback
 		return parent::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType);
 	}
 };
-activatePackage(MRPGBot_DamageCallback);
-deactivatePackage(MRPG_Damage);
-activatePackage(MRPG_Damage); //ensure that modified damage values come through so that the callback gets the right amt
+activatePackage(MRPGBot_DamageCallbackPackage);
+deactivatePackage(MRPG_DamagePackage);
+activatePackage(MRPG_DamagePackage); //ensure that modified damage values come through so that the callback gets the right amt

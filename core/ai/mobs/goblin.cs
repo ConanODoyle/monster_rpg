@@ -45,9 +45,9 @@ $RPGData_Goblin.attackType = "GoblinAttackType";
 // $RPGData_Goblin.leashDistance = 10;
 $RPGData_Goblin.autoCutoffRange = 40;
 
-$RPGData_Goblin.botLogicFunc = "MRPG_simpleLogic";
-$RPGData_Goblin.botActionFunc = "MRPG_simpleAction";
-$RPGData_Goblin.damageCallbackFunc = "MRPG_simpleDamageCallback";
+$RPGData_Goblin.botLogicFunc = "MRPGBot_simpleLogic";
+$RPGData_Goblin.botActionFunc = "MRPGBot_simpleAction";
+$RPGData_Goblin.damageCallbackFunc = "MRPGBot_simpleDamageCallback";
 
 $RPGData_Goblin.expReward = 10;
 
@@ -81,9 +81,9 @@ $RPGData_GoblinArcher.attackType = "GoblinRangedAttackType";
 // $RPGData_Goblin.leashDistance = 10;
 // $RPGData_Goblin.autoCutoffRange = 40;
 
-$RPGData_GoblinArcher.botLogicFunc = "MRPG_simpleLogic";
-$RPGData_GoblinArcher.botActionFunc = "MRPG_simpleAction";
-$RPGData_GoblinArcher.damageCallbackFunc = "MRPG_simpleDamageCallback";
+$RPGData_GoblinArcher.botLogicFunc = "MRPGBot_simpleLogic";
+$RPGData_GoblinArcher.botActionFunc = "MRPGBot_simpleAction";
+$RPGData_GoblinArcher.damageCallbackFunc = "MRPGBot_simpleDamageCallback";
 
 $RPGData_GoblinArcher.expReward = 10;
 

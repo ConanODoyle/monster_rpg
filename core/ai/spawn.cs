@@ -110,7 +110,7 @@ function spawnTick(%idx)
 	$masterSpawnSchedule = schedule(1, 0, spawnTick, %idx);
 }
 
-package MRPG_SpawnPackage 
+package MRPGBot_SpawnPackage 
 {
 	function fxDTSBrickData::onAdd(%this, %obj)
 	{
@@ -141,7 +141,7 @@ package MRPG_SpawnPackage
 		return %ret;
 	}
 };
-activatePackage(MRPG_SpawnPackage);
+activatePackage(MRPGBot_SpawnPackage);
 
 
 
