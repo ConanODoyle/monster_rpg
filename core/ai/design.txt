@@ -1,15 +1,21 @@
-//// structure ////
+//// client structure ////
+
+
+
+
+//// rpgdata structure ////
 %bot.RPGData = scriptobject with fields defining properties
 - name
 - maxDamage
 - armor
 - resist
 - level
+- thinkTime
+- resetTargetTime
 
 - searchType (ScriptObject)
 	- searchFunction
 	- searchRadius
-	- etc...
 
 - attackType (ScriptObject)
 	- attackImage
