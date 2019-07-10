@@ -20,7 +20,7 @@ if (!isObject($RPGData_GoblinAttack))
 		attackImage = "goblinBowImage";
 		triggerTime = "1 1";
 		minRange = 0;
-		maxRange = 18;
+		maxRange = 100;
 		stopRange = 1000;
 		backingAttack = 1;
 	};
@@ -68,7 +68,7 @@ $RPGData_GoblinArcher.level = -500;
 $RPGData_GoblinArcher.thinkTime = 1;
 $RPGData_GoblinArcher.resetTargetTime = 4;
 
-$RPGData_GoblinArcher.searchType = "NearRadiusLOSSearchType";
+$RPGData_GoblinArcher.searchType = "RadiusLOSSearchType";
 
 $RPGData_GoblinArcher.attackType = "GoblinRangedAttackType";
 
@@ -90,7 +90,7 @@ $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
 
 datablock ProjectileData(goblinSwordProjectile : swordProjectile)
 {
-	directDamage = 3;
+	directDamage = 5;
 	type = "Physical";
 };
 
@@ -116,5 +116,5 @@ datablock ShapeBaseImageData(goblinBowImage : BowImage)
 	colorShiftColor = "0.53 0.43 0 1";
 	projectile = goblinArrowProjectile;
 
-	stateTimeoutValue[3]		= 3;
+	stateTimeoutValue[3]		= 1.8;
 };
