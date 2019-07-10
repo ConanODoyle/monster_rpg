@@ -1,7 +1,9 @@
 //// client structure ////
-
-
-
+- maxDamage //true hp value of the player, update on damage as needed
+- armor
+- resist
+- level
+- class
 
 //// rpgdata structure ////
 %bot.RPGData = scriptobject with fields defining properties
