@@ -80,7 +80,7 @@ function bottomprintInfo(%cl)
 	%levelExp = getLevelExp(%cl.level + 1) | 0;
 	%expBars = getExpBars(%exp / %levelExp);
 
-	if (%levelExp > 1000000)
+	if (%levelExp >= 1000000)
 	{
 		%levelExp = mFloatLength((%levelExp | 0) / (1000000 | 0), 2) @ "M";
 	}
@@ -89,7 +89,7 @@ function bottomprintInfo(%cl)
 		%levelExp = mFloatLength((%levelExp | 0) / (1000 | 0), 2) @ "K";
 	}
 
-	if (%exp > 1000000)
+	if (%exp >= 1000000)
 	{
 		%exp = mFloatLength((%exp | 0) / (1000000 | 0), 2) @ "M";
 	}
