@@ -2,6 +2,7 @@ echo("");
 echo("");
 echo("----Executing libraries----");
 exec("./lib/Support_RPGDamage.cs");
+exec("./lib/Support_Levels.cs");
 
 echo("");
 echo("");
