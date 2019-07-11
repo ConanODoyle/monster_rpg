@@ -20,8 +20,6 @@ function GameConnection::addExperience(%cl, %amt)
 		%cl.exp -= getLevelEXP(%cl.level + 1);
 		%cl.levelUp();
 	}
-
-	bottomprintInfo(%cl);
 }
 
 function GameConnection::levelUp(%cl)
@@ -32,8 +30,6 @@ function GameConnection::levelUp(%cl)
 		%cl.player.spawnExplosion("spawnProjectile", "1 1 1");
 	}
 	%cl.playSound(rewardSound);
-	
-	bottomprintInfo(%cl);
 }
 
 RegisterPersistenceVar("level", false, "");

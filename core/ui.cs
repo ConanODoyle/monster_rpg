@@ -84,3 +84,37 @@ function bottomprintInfo(%cl)
 
 	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ "<just:right>" @ %exp SPC %expBars, -1, 0);
 }
+
+package MRPG_UIPackage
+{
+	function Armor::damage(%data, %obj, %sourceObject, %pos, %damage, %damageType)
+	{
+		%cl = %obj.client;
+		%ret = parent::damage(%data, %obj, %sourceObject, %pos, %damage, %damageType);
+		if (isObject(%cl))
+		{
+			bottomprintInfo(%cl);
+		}
+		return %ret;
+	}
+
+	function GameConnection::spawnPlayer(%cl)
+	{
+		%ret = parent::spawnPlayer(%cl);
+		bottomprintInfo(%cl);
+		return %ret;
+	}
+
+	function GameConnection::addExperience(%cl, %amt)
+	{
+		parent::addExperience(%cl, %amt);
+		bottomprintInfo(%cl);
+	}
+
+	function GameConnection::levelUp(%cl)
+	{
+		parent::levelUp(%cl);
+		bottomprintInfo(%cl);
+	}
+};
+activatePackage(MRPG_UIPackage);
