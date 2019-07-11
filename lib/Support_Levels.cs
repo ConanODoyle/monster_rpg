@@ -34,6 +34,3 @@ function GameConnection::levelUp(%cl)
 	%cl.playSound(rewardSound);
 	%cl.maxDamage = 100 + (%cl.level - 1) * 10;
 }
-
-RegisterPersistenceVar("level", false, "");
-RegisterPersistenceVar("exp", false, "");
