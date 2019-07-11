@@ -27,9 +27,12 @@ function GameConnection::levelUp(%cl)
 	%cl.level++;
 	if (isObject(%cl.player))
 	{
-		%cl.player.spawnExplosion("spawnProjectile", "1 1 1");
+		%pl = %cl.player;
+		%pl.spawnExplosion("spawnProjectile", "1 1 1");
+		%pl.setDamageLevel(%pl.getDamageLevel() - %pl.getDatablock().maxDamage * 0.1); //heal 10% on level up
 	}
 	%cl.playSound(rewardSound);
+	%cl.maxDamage = 100 + (%cl.level - 1) * 10;
 }
 
 RegisterPersistenceVar("level", false, "");
