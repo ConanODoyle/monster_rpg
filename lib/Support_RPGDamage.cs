@@ -104,7 +104,9 @@ function getModifiedPlayerDamage(%cl, %proj, %damage, %isRadius)
 
 function getModifiedDamage(%proj, %level, %armor, %resist, %damage, %isRadius)
 {
-	%levDiff = getMax(0, %level - %proj.level);
+	%projLevel = %proj.level $= "" ? %proj.client.level : %proj.level;
+	%projLevel = %projLevel $= "" ? %proj.client.RPGData.level : %projLevel;
+	%levDiff = getMax(0, %level - %projLevel);
 	
 	if (%levDiff < 100)
 	{

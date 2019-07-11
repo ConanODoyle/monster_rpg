@@ -109,6 +109,7 @@ function spawnTick(%idx)
 
 	$masterSpawnSchedule = schedule(1, 0, spawnTick, %idx);
 }
+spawnTick(0);
 
 package MRPGBot_SpawnPackage 
 {
@@ -139,6 +140,24 @@ package MRPGBot_SpawnPackage
 		}
 
 		return %ret;
+	}
+
+	function fxDTSBrickData::onDeath(%this, %obj)
+	{
+		if (isObject(%obj.hBot))
+		{
+			%obj.hBot.delete();
+		}
+		parent::onDeath(%this, %obj);
+	}
+
+	function fxDTSBrickData::onRemove(%this, %obj)
+	{
+		if (isObject(%obj.hBot))
+		{
+			%obj.hBot.delete();
+		}
+		parent::onRemove(%this, %obj);
 	}
 };
 activatePackage(MRPGBot_SpawnPackage);

@@ -81,8 +81,9 @@ function bottomprintInfo(%cl)
 	%expBars = getExpBars(%exp / %levelExp);
 
 	%exp = "\c3Level " @ %cl.level + 0 @ " \c5" @ %exp + 0 @ "/" @ %levelExp + 0;
+	%gold = " <br>\c3Gold: " @ mFloor(%cl.score) @ " ";
 
-	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ "<just:right>" @ %exp SPC %expBars, -1, 0);
+	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ "<just:right>" @ %exp SPC %expBars @ %gold, -1, 0);
 }
 
 package MRPG_UIPackage
@@ -111,9 +112,15 @@ package MRPG_UIPackage
 		bottomprintInfo(%cl);
 	}
 
-	function GameConnection::levelUp(%cl)
+	function GameConnection::levelUp(%cl, %amt)
 	{
-		parent::levelUp(%cl);
+		parent::levelUp(%cl, %amt);
+		bottomprintInfo(%cl);
+	}
+
+	function GameConnection::incScore(%cl, %score)
+	{
+		parent::incScore(%cl, %score);
 		bottomprintInfo(%cl);
 	}
 };

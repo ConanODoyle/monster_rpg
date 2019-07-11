@@ -33,7 +33,7 @@ $RPGData_Goblin.name = "Goblin";
 $RPGData_Goblin.maxDamage = 80;
 $RPGData_Goblin.armor = 0;
 $RPGData_Goblin.resist = 0;
-$RPGData_Goblin.level = -500;
+$RPGData_Goblin.level = 1;
 $RPGData_Goblin.thinkTime = 1;
 $RPGData_Goblin.resetTargetTime = 10;
 
@@ -49,7 +49,7 @@ $RPGData_Goblin.botLogicFunc = "MRPGBot_simpleLogic";
 $RPGData_Goblin.botActionFunc = "MRPGBot_simpleAction";
 $RPGData_Goblin.damageCallbackFunc = "MRPGBot_simpleDamageCallback";
 
-$RPGData_Goblin.expReward = "6 8";
+$RPGData_Goblin.expReward = "4 6";
 $RPGData_Goblin.goldReward = "1 2";
 
 $RPGData_Goblin.maxForwardSpeed = 4.5;
@@ -70,7 +70,7 @@ $RPGData_GoblinArcher.name = "Goblin Archer";
 $RPGData_GoblinArcher.maxDamage = 80;
 $RPGData_GoblinArcher.armor = 0;
 $RPGData_GoblinArcher.resist = 0;
-$RPGData_GoblinArcher.level = -500;
+$RPGData_GoblinArcher.level = 1;
 $RPGData_GoblinArcher.thinkTime = 1;
 $RPGData_GoblinArcher.resetTargetTime = 4;
 
@@ -86,7 +86,7 @@ $RPGData_GoblinArcher.botLogicFunc = "MRPGBot_simpleLogic";
 $RPGData_GoblinArcher.botActionFunc = "MRPGBot_simpleAction";
 $RPGData_GoblinArcher.damageCallbackFunc = "MRPGBot_simpleDamageCallback";
 
-$RPGData_GoblinArcher.expReward = "3 5";
+$RPGData_GoblinArcher.expReward = "6 8";
 $RPGData_GoblinArcher.goldReward = "1 2";
 
 $RPGData_GoblinArcher.maxForwardSpeed = 0;
@@ -127,5 +127,5 @@ datablock ShapeBaseImageData(goblinBowImage : BowImage)
 	colorShiftColor = "0.53 0.43 0 1";
 	projectile = goblinArrowProjectile;
 
-	stateTimeoutValue[3]		= 1.8;
+	stateTimeoutValue[3]		= 1.6;
 };
