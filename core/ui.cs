@@ -32,7 +32,7 @@ function getHPBars(%cl)
 
 function getExpBars(%percent)
 {
-	%num = 8;
+	%num = 10;
 
 	%str = "\c6[\c5";
 	for (%i = 0; %i < %num; %i++)
@@ -77,13 +77,31 @@ function bottomprintInfo(%cl)
 	}
 
 	%exp = %cl.exp;
-	%levelExp = getLevelExp(%cl.level + 1);
+	%levelExp = getLevelExp(%cl.level + 1) | 0;
 	%expBars = getExpBars(%exp / %levelExp);
 
-	%exp = "\c3Level " @ %cl.level + 0 @ " \c5" @ %exp + 0 @ "/" @ %levelExp + 0;
-	%gold = " <br>\c3Gold: " @ mFloor(%cl.score) @ " ";
+	if (%levelExp > 1000000)
+	{
+		%levelExp = mFloatLength((%levelExp | 0) / (1000000 | 0), 2) @ "M";
+	}
+	else if (%levelExp > 1000)
+	{
+		%levelExp = mFloatLength((%levelExp | 0) / (1000 | 0), 2) @ "K";
+	}
 
-	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ "<just:right>" @ %exp SPC %expBars @ %gold, -1, 0);
+	if (%exp > 1000000)
+	{
+		%exp = mFloatLength((%exp | 0) / (1000000 | 0), 2) @ "M";
+	}
+	else if (%exp > 1000)
+	{
+		%exp = mFloatLength((%exp | 0) / (1000 | 0), 2) @ "K";
+	}
+
+	%exp = "\c3Level " @ %cl.level + 0 @ " \c5" @ %exp @ "/" @ %levelExp;
+	%gold = "<just:right>\c3Gold: " @ mFloor(%cl.score) @ " ";
+
+	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ %gold @ "<br><just:left>" @ %expBars SPC %exp, -1, 0);
 }
 
 package MRPG_UIPackage
