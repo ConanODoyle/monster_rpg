@@ -15,16 +15,25 @@ function GameConnection::addExperience(%cl, %amt)
 	%amt = mFloor(%amt);
 	%cl.exp += %amt;
 	%levelExp = getLevelEXP(%cl.level + 1);
-	if (%cl.exp > %levelExp)
+	if (%cl.exp >= %levelExp)
 	{
 		%cl.exp -= getLevelEXP(%cl.level + 1);
 		%cl.levelUp();
 	}
+
+	bottomprintInfo(%cl);
 }
 
 function GameConnection::levelUp(%cl)
 {
 	%cl.level++;
+	if (isObject(%cl.player))
+	{
+		%cl.player.spawnExplosion("spawnProjectile", "1 1 1");
+	}
+	%cl.playSound(rewardSound);
+	
+	bottomprintInfo(%cl);
 }
 
 RegisterPersistenceVar("level", false, "");
