@@ -67,6 +67,12 @@ function MRPGBot_simpleLogic(%bot)
 	{
 		return;
 	}
+	else if (%bot.isDisabled())
+	{
+		clearTriggers(%bot);
+		%bot.nextThink = $sim::time + 20;
+		return;
+	}
 
 	%data = %bot.RPGData;
 	%searchData = %data.searchType;
@@ -79,7 +85,6 @@ function MRPGBot_simpleLogic(%bot)
 		}
 		else if (%data.autoCutoffRange !$= "")
 		{
-			talk(vectorDist(%bot.position, %bot.target.position));
 			if (vectorDist(%bot.position, %bot.target.position) > %data.autoCutoffRange)
 			{
 				%bot.target = "";
@@ -253,7 +258,7 @@ function MRPGBot_simpleDamageCallback(%bot, %atkObj, %pos, %damage, %damageType)
 	{
 		%bot.lastAttackedBy_[%attacker] = $Sim::Time;
 	}
-	
+
 	%data = %bot.RPGData;
 	%searchData = %data.searchType;
 

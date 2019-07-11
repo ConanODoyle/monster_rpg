@@ -86,8 +86,8 @@ $RPGData_GoblinArcher.botLogicFunc = "MRPGBot_simpleLogic";
 $RPGData_GoblinArcher.botActionFunc = "MRPGBot_simpleAction";
 $RPGData_GoblinArcher.damageCallbackFunc = "MRPGBot_simpleDamageCallback";
 
-$RPGData_Goblin.expReward = "3 5";
-$RPGData_Goblin.goldReward = "1 2";
+$RPGData_GoblinArcher.expReward = "3 5";
+$RPGData_GoblinArcher.goldReward = "1 2";
 
 $RPGData_GoblinArcher.maxForwardSpeed = 0;
 $RPGData_GoblinArcher.maxBackwardSpeed = 0;

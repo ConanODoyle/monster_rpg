@@ -19,7 +19,7 @@ function getHPBars(%cl)
 	%str = "\c6[\c2";
 	for (%i = 0; %i < %num; %i++)
 	{
-		if (%i * %num/100 > %percent && !%bypass)
+		if (%i * 1/%num >= %percent && !%bypass)
 		{
 			%str = %str @ "\c7";
 			%bypass = 1;
@@ -37,7 +37,7 @@ function getExpBars(%percent)
 	%str = "\c6[\c5";
 	for (%i = 0; %i < %num; %i++)
 	{
-		if (%i * %num/100 > %percent && !%bypass)
+		if (%i * 1/8 >= %percent && !%bypass)
 		{
 			%str = %str @ "\c7";
 			%bypass = 1;
@@ -91,7 +91,7 @@ package MRPG_UIPackage
 	{
 		%cl = %obj.client;
 		%ret = parent::damage(%data, %obj, %sourceObject, %pos, %damage, %damageType);
-		if (isObject(%cl))
+		if (isObject(%cl) && %cl.getClassName() $= "GameConnection")
 		{
 			bottomprintInfo(%cl);
 		}

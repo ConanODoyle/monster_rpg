@@ -16,10 +16,16 @@ package MRPGBot_KillRewardPackage
 			%goldReward = getRandom(getWord(%data.goldReward, 0), getWord(%data.goldReward, 1));
 			%expReward = getRandom(getWord(%data.expReward, 0), getWord(%data.expReward, 1));
 
-			%recipient.addScore(%goldReward);
+			%recipient.incScore(%goldReward);
 			%recipient.addExperience(%expReward);
 		}
 		return parent::onDisabled(%data, %obj, %state);
+	}
+
+	function AIPlayer::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc)
+	{
+		//fix console error of bots dying
+		return;
 	}
 };
 activatePackage(MRPGBot_KillRewardPackage);
