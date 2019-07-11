@@ -30,7 +30,7 @@ function getHPBars(%cl)
 	return %str;
 }
 
-function getExpBars(%cl, %percent)
+function getExpBars(%percent)
 {
 	%num = 8;
 
