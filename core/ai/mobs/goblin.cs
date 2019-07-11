@@ -74,7 +74,7 @@ $RPGData_GoblinArcher.level = -500;
 $RPGData_GoblinArcher.thinkTime = 1;
 $RPGData_GoblinArcher.resetTargetTime = 4;
 
-$RPGData_GoblinArcher.searchType = "RadiusLOSSearchType";
+$RPGData_GoblinArcher.searchType = new ScriptObject(GoblinArcherLOSSearch : RadiusLOSSearchType) { searchRadius = 45; };
 
 $RPGData_GoblinArcher.attackType = "GoblinRangedAttackType";
 
