@@ -13,8 +13,23 @@ package MRPGBot_KillRewardPackage
 		{
 			%data = %obj.RPGData;
 			%recipient = %obj.lastDamagedByClient;
-			%goldReward = getRandom(getWord(%data.goldReward, 0), getWord(%data.goldReward, 1));
-			%expReward = getRandom(getWord(%data.expReward, 0), getWord(%data.expReward, 1));
+			if (getWordCount(%data.goldReward) > 1)
+			{
+				%goldReward = getRandom(getWord(%data.goldReward, 0), getWord(%data.goldReward, 1));
+			}
+			else
+			{
+				%goldReward = %data.goldReward;
+			}
+
+			if (getWordCount(%data.expReward) > 1)
+			{
+				%expReward = getRandom(getWord(%data.expReward, 0), getWord(%data.expReward, 1));
+			}
+			else
+			{
+				%expReward = %data.expReward;
+			}
 
 			%recipient.incScore(%goldReward);
 			%recipient.addExperience(%expReward);
@@ -25,7 +40,7 @@ package MRPGBot_KillRewardPackage
 	function AIPlayer::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc)
 	{
 		//fix console error of bots dying
-		return;
+		return parent::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc);
 	}
 };
 activatePackage(MRPGBot_KillRewardPackage);
