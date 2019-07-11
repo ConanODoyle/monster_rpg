@@ -1,6 +1,7 @@
 exec("./ui.cs");
 exec("./canDamage.cs");
 exec("./persistence.cs");
+exec("./valueCheck.cs");
 
 echo("");
 echo("--Executing AI--");
