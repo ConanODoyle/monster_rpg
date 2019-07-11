@@ -150,5 +150,9 @@ function getModifiedDamage(%proj, %level, %armor, %resist, %damage, %isRadius)
 			%damage = %levelMod * %rawDamage;
 		}
 	}
+	else
+	{
+		return 0;
+	}
 	return %damage;
 }

@@ -4,7 +4,7 @@ function getLevelEXP(%level)
 
 	for(%i = 1; %i < %level; %i++)
 	{
-		%answer += mFloor(%i + 300 * mpow(2, (%i / 7)));
+		%answer += mFloor(%i + 300 * mpow(2, (%i / 35)));
 	}
 
 	return mFloor(%answer / 4);
@@ -13,12 +13,13 @@ function getLevelEXP(%level)
 function GameConnection::addExperience(%cl, %amt)
 {
 	%amt = mFloor(%amt);
-	%cl.exp += %amt;
-	%levelExp = getLevelEXP(%cl.level + 1);
-	if (%cl.exp >= %levelExp)
+	%cl.exp = ((%cl.exp | 0) + %amt | 0) | 0;
+	%levelExp = getLevelEXP(%cl.level + 1) | 0;
+	while (%cl.exp >= %levelExp)
 	{
-		%cl.exp -= getLevelEXP(%cl.level + 1);
+		%cl.exp = ((%cl.exp | 0) - %levelExp | 0);
 		%cl.levelUp(1);
+		%levelExp = getLevelEXP(%cl.level + 1) | 0;
 	}
 }
 
