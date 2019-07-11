@@ -36,6 +36,7 @@
 - damageCallbackFunc
 
 - expReward
+- goldReward
 
 //properties directly applied to bot
 - maxForwardSpeed
