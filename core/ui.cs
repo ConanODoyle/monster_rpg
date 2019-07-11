@@ -101,7 +101,7 @@ package MRPG_UIPackage
 	function GameConnection::spawnPlayer(%cl)
 	{
 		%ret = parent::spawnPlayer(%cl);
-		bottomprintInfo(%cl);
+		schedule(1, 0, bottomprintInfo, %cl);
 		return %ret;
 	}
 

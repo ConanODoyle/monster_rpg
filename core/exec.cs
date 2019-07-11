@@ -1,4 +1,5 @@
 exec("./ui.cs");
+exec("./canDamage.cs");
 
 echo("");
 echo("--Executing AI--");
