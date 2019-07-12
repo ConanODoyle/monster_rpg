@@ -40,7 +40,8 @@ package MRPGBot_KillRewardPackage
 	function AIPlayer::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc)
 	{
 		//fix console error of bots dying
-		return parent::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc);
+		return;
+		// return parent::onDeath(%bot, %killer, %killerClient, %damageType, %damageLoc);
 	}
 };
 activatePackage(MRPGBot_KillRewardPackage);
