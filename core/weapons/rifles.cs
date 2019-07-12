@@ -1,3 +1,87 @@
+//functions
+function Rifle_onFire(%this, %obj, %slot)
+{
+	if(vectorLen(%obj.getVelocity()) < 2 && (getSimTime() - %obj.lastShotTime) > 1000)
+	{
+		%spread = 0.0001;
+	}
+	else
+	{
+		%spread = 0.0005;
+	}
+	%projectile = %this.projectile;
+	%shellcount = 1;
+
+	%obj.playThread(2, jump);
+	%obj.schedule(60, playThread, 2, plant);
+	%obj.toolAmmo[%obj.currTool]--;
+
+	%p = fireProjectiles(%this, %obj, %slot, %projectile, %spread, %shellcount);
+
+	centerprintToolAmmoString(%this, %obj, %slot);
+
+	return %p;
+}
+
+function Rifle_onEject(%this, %obj, %slot)
+{
+	%obj.playThread(2, shiftright);
+	%obj.schedule(100, playThread, 2, shiftleft);
+	%obj.schedule(200, playThread, 2, plant);
+	
+	centerprintToolAmmoString(%this, %obj, %slot);
+}
+
+function Rifle_onReloadStart(%this, %obj, %slot)
+{
+	%obj.playThread(2, shiftright);
+	%obj.schedule(100, playThread, 2, plant);
+
+	centerprintToolAmmoString(%this, %obj, %slot);
+}
+
+function Rifle_onMount(%this, %obj, %slot)
+{
+	centerprintToolAmmoString(%this, %obj, %slot);
+}
+
+function RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal)
+{
+	if(%this.directDamage <= 0)
+	{
+		return;
+	}
+
+	%damageType = $DamageType::Direct;
+	if(%this.directDamageType)
+	{
+		%damageType = %this.directDamageType;
+	}
+
+	%scale = getWord(%obj.getScale(), 2);
+	%directDamage = %this.directDamage;
+	%damage = %directDamage;
+
+	%sobj = %obj.sourceObject;
+
+	if(%col.getType() & $TypeMasks::PlayerObjectType)
+	{
+		%colscale = getWord(%col.getScale(),2);
+		if (getword(%pos, 2) > getword(%col.getWorldBoxCenter(), 2) - 3.3 * %colscale)
+		{
+			%directDamage = %directDamage * 2;
+			%damageType = $DamageType::Rifle;
+		}
+
+		%col.damage(%obj, %pos, %directDamage, %damageType);
+	}
+	else
+	{
+		%col.damage(%obj, %pos, %directDamage, %damageType);
+	}
+}
+
+
 //audio
 datablock AudioProfile(RifleReloadSound)
 {
@@ -13,6 +97,13 @@ datablock AudioProfile(RifleFireSound)
    preload = true;
 };
 
+datablock AudioProfile(HeavyRifleFireSound)
+{
+   filename    = "./assets/sounds/HK_Sniper_Rifle_Fire.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 datablock AudioProfile(RifleRicochetSound)
 {
    filename    = "./assets/sounds/HK_Ricochet.wav";
@@ -22,7 +113,6 @@ datablock AudioProfile(RifleRicochetSound)
 
 
 //flash
-
 datablock ParticleData(RifleFlashParticle)
 {
     dragCoefficient      = 0;
@@ -71,7 +161,6 @@ datablock ParticleEmitterData(RifleFlashEmitter)
 
 
 //explosion
-
 datablock ParticleData(RifleExplosionParticle)
 {
 	dragCoefficient      = 8;
@@ -191,13 +280,13 @@ datablock ParticleEmitterData(RifleTrailBEmitter)
    particles = RifleTrailBParticle;
 };
 
-AddDamageType("RustyRifle",   '<bitmap:add-ons/Weapon_Gun/CI_Gun> %1',    '%2 <bitmap:add-ons/Weapon_Gun/CI_Gun> %1',0.75,1);
+AddDamageType("Rifle",   '<bitmap:add-ons/Weapon_Gun/CI_Gun> %1',    '%2 <bitmap:add-ons/Weapon_Gun/CI_Gun> %1',0.75,1);
 datablock ProjectileData(RustyRifleProjectile)
 {
    projectileShapeName = "add-ons/Weapon_Gun/bullet.dts";
-   directDamage        = 25;
-   directDamageType    = $DamageType::RustyRifle;
-   radiusDamageType    = $DamageType::RustyRifle;
+   directDamage        = 20;
+   directDamageType    = $DamageType::Rifle;
+   radiusDamageType    = $DamageType::Rifle;
 
    brickExplosionRadius = 0;
    brickExplosionImpact = false;          //destroy a brick if we hit it directly?
@@ -210,7 +299,7 @@ datablock ProjectileData(RustyRifleProjectile)
    explosion           = RifleExplosion;
    particleEmitter     = RifleTrailBEmitter;
 
-   muzzleVelocity      = 200;
+   muzzleVelocity      = 100;
    velInheritFactor    = 1;
 
    armingDelay         = 0;
@@ -301,7 +390,6 @@ datablock ShapeBaseImageData(RustyRifleImage)
    armReady = true;
    minShotTime = 1000;
 
-   maxAmmo = 5;
    doColorShift = true;
    colorShiftColor = RustyRifleItem.colorShiftColor;
 
@@ -330,7 +418,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 
 	stateName[2]						= "Fire";
 	stateTransitionOnTimeout[2]			= "Smoke";
-	stateTimeoutValue[2]				= 0.2;
+	stateTimeoutValue[2]				= 0.3;
 	stateFire[2]						= true;
 	stateAllowImageChange[2]			= false;
 	stateScript[2]						= "onFire";
@@ -342,13 +430,13 @@ datablock ShapeBaseImageData(RustyRifleImage)
 
 	stateName[3]						= "Smoke";
 	stateEmitter[3]						= GunSmokeEmitter;
-	stateEmitterTime[3]					= 0.15;
+	stateEmitterTime[3]					= 0.3;
 	stateEmitterNode[3]					= "muzzleNode";
 	stateTimeoutValue[3]				= 0.15;
 	stateTransitionOnTimeout[3]			= "Bolt";
 
 	stateName[4]						= "Bolt";
-	stateTimeoutValue[4]				= 1.0;
+	stateTimeoutValue[4]				= 0.8;
 	stateTransitionOnTimeout[4]			= "LoadCheckA";
 	stateWaitForTimeout[4]				= true;
 	stateEjectShell[4]					= true;
@@ -376,7 +464,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 						
 	stateName[9]						= "ForceReload";
 	stateTransitionOnTimeout[9]			= "ForceReloaded";
-	stateTimeoutValue[9]				= 0.4;
+	stateTimeoutValue[9]				= 0.8;
 	stateSequence[9]					= "Fire";
 	stateSound[9]						= BrickMoveSound;
 	stateScript[9]						= "onReloadStart";
@@ -390,7 +478,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTransitionOnTimeout[11]		= "Reloaded";
 	stateTransitionOnTriggerDown[11]	= "Fire";
 	stateWaitForTimeout[11]				= false;
-	stateTimeoutValue[11]				= 0.4;
+	stateTimeoutValue[11]				= 0.8;
 	stateSequence[11]					= "Fire";
 	stateSound[11]						= BrickMoveSound;
 	stateScript[11]						= "onReloadStart";
@@ -413,84 +501,217 @@ datablock ShapeBaseImageData(RustyRifleImage)
 
 function RustyRifleImage::onFire(%this, %obj, %slot)
 {
-	if(vectorLen(%obj.getVelocity()) < 2 && (getSimTime() - %obj.lastShotTime) > 1000)
-	{
-		%spread = 0.0001;
-	}
-	else
-	{
-		%spread = 0.0005;
-	}
-	%projectile = %this.projectile;
-	%shellcount = 1;
-
-	%obj.playThread(2, jump);
-	%obj.schedule(60, playThread, 2, plant);
-	%obj.toolAmmo[%obj.currTool]--;
-
-	%p = fireProjectiles(%this, %obj, %slot, %projectile, %spread, %shellcount);
-
-	centerprintToolAmmoString(%this, %obj, %slot);
-
-	return %p;
+	return Rifle_onFire(%this, %obj, %slot);
 }
 
-function RustyRifleImage::onEject(%this,%obj,%slot)
+function RustyRifleImage::onEject(%this, %obj, %slot)
 {
-	%obj.playThread(2, shiftright);
-	%obj.schedule(100, playThread, 2, shiftleft);
-	%obj.schedule(200, playThread, 2, plant);
-	
-	centerprintToolAmmoString(%this, %obj, %slot);
+	Rifle_onEject(%this, %obj, %slot);
 }
 
-function RustyRifleImage::onReloadStart(%this,%obj,%slot)
+function RustyRifleImage::onReloadStart(%this, %obj, %slot)
 {
-	%obj.playThread(2, shiftright);
-	%obj.schedule(100, playThread, 2, plant);
-
-	centerprintToolAmmoString(%this, %obj, %slot);
+	Rifle_onReloadStart(%this, %obj, %slot);
 }
 
-function RustyRifleImage::onMount(%this,%obj,%slot)
+function RustyRifleImage::onMount(%this, %obj, %slot)
 {
-	Parent::onMount(%this,%obj,%slot);
-
-	centerprintToolAmmoString(%this, %obj, %slot);
+	Parent::onMount(%this, %obj, %slot);
+	Rifle_onMount(%this, %obj, %slot);
 }
 
 function RustyRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
 {
-	if(%this.directDamage <= 0)
-	{
-		return;
-	}
+	RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal);
+}
 
-	%damageType = $DamageType::Direct;
-	if(%this.directDamageType)
-	{
-		%damageType = %this.directDamageType;
-	}
 
-	%scale = getWord(%obj.getScale(), 2);
-	%directDamage = %this.directDamage;
-	%damage = %directDamage;
 
-	%sobj = %obj.sourceObject;
 
-	if(%col.getType() & $TypeMasks::PlayerObjectType)
-	{
-		%colscale = getWord(%col.getScale(),2);
-		if (getword(%pos, 2) > getword(%col.getWorldBoxCenter(), 2) - 3.3 * %colscale)
-		{
-			%directDamage = %directDamage * 2;
-			%damageType = $DamageType::RustyRifle;
-		}
 
-		%col.damage(%obj, %pos, %directDamage, %damageType);
-	}
-	else
-	{
-		%col.damage(%obj, %pos, %directDamage, %damageType);
-	}
+
+datablock ProjectileData(CleanRifleProjectile : RustyRifleProjectile)
+{
+	directDamage = 40;
+	muzzleVelocity = 125;
+};
+
+datablock ItemData(CleanRifleItem : RustyRifleItem)
+{
+	shapeFile = "./assets/rifles/rifle.dts";
+	uiName = "Clean Rifle";
+	image = CleanRifleImage;
+
+	colorShiftColor = "0.23 0.26 0.32 1";
+	maxAmmo = 6;
+};
+
+datablock ShapeBaseImageData(CleanRifleImage : RustyRifleImage)
+{
+	shapeFile = "./assets/rifles/rifle.dts";
+	colorShiftColor = CleanRifleItem.colorShiftColor;
+	projectile = CleanRifleProjectile;
+
+	item = CleanRifleItem;
+
+	stateTimeoutValue[2] = 0.2; //reduce fire state time (0.3 >> 0.15)
+	stateTimeoutValue[3] = 0.15; //reduce smoke time (0.3 >> 0.15)
+	stateTimeoutValue[4] = 0.7; //reduce bolt time (0.8 >> 0.7)
+
+	stateTimeoutValue[9] = 0.6; //reduce reload time (0.8 >> 0.6)
+	stateTimeoutValue[11] = 0.6; //reduce reload time (0.8 >> 0.6)
+};
+
+function CleanRifleImage::onFire(%this, %obj, %slot)
+{
+	return Rifle_onFire(%this, %obj, %slot);
+}
+
+function CleanRifleImage::onEject(%this, %obj, %slot)
+{
+	Rifle_onEject(%this, %obj, %slot);
+}
+
+function CleanRifleImage::onReloadStart(%this, %obj, %slot)
+{
+	Rifle_onReloadStart(%this, %obj, %slot);
+}
+
+function CleanRifleImage::onMount(%this, %obj, %slot)
+{
+	Parent::onMount(%this, %obj, %slot);
+	Rifle_onMount(%this, %obj, %slot);
+}
+
+function CleanRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
+{
+	RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal);
+}
+
+
+
+
+
+
+datablock ProjectileData(PolishedRifleProjectile : RustyRifleProjectile)
+{
+	directDamage = 60;
+	muzzleVelocity = 170;
+};
+
+datablock ItemData(PolishedRifleItem : RustyRifleItem)
+{
+	shapeFile = "./assets/rifles/longRifle.dts";
+	uiName = "Polished Rifle";
+	image = PolishedRifleImage;
+
+	colorShiftColor = "0.22 0.40 0.38 1";
+	maxAmmo = 8;
+};
+
+datablock ShapeBaseImageData(PolishedRifleImage : RustyRifleImage)
+{
+	shapeFile = "./assets/rifles/longRifle.dts";
+	colorShiftColor = PolishedRifleItem.colorShiftColor;
+	projectile = PolishedRifleProjectile;
+
+	item = PolishedRifleItem;
+
+	stateTimeoutValue[2] = 0.08; //reduce fire state time (0.15 >> 0.08)
+	stateTimeoutValue[3] = 0.05; //reduce smoke time (0.15 >> 0.05)
+	stateTimeoutValue[4] = 0.7; //reduce bolt time (0.7 >> 0.7)
+
+	stateTimeoutValue[9] = 0.4; //reduce reload time (0.6 >> 0.4)
+	stateTimeoutValue[11] = 0.4; //reduce reload time (0.6 >> 0.4)
+};
+
+function PolishedRifleImage::onFire(%this, %obj, %slot)
+{
+	return Rifle_onFire(%this, %obj, %slot);
+}
+
+function PolishedRifleImage::onEject(%this, %obj, %slot)
+{
+	Rifle_onEject(%this, %obj, %slot);
+}
+
+function PolishedRifleImage::onReloadStart(%this, %obj, %slot)
+{
+	Rifle_onReloadStart(%this, %obj, %slot);
+}
+
+function PolishedRifleImage::onMount(%this, %obj, %slot)
+{
+	Parent::onMount(%this, %obj, %slot);
+	Rifle_onMount(%this, %obj, %slot);
+}
+
+function PolishedRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
+{
+	RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal);
+}
+
+
+
+
+
+
+datablock ProjectileData(MSniperRifleProjectile : RustyRifleProjectile)
+{
+	directDamage = 180;
+	muzzleVelocity = 200;
+};
+
+datablock ItemData(MSniperRifleItem : RustyRifleItem)
+{
+	shapeFile = "./assets/rifles/sniperRifle.dts";
+	uiName = "Sniper Rifle";
+	image = MSniperRifleImage;
+
+	colorShiftColor = "0.34 0.34 0.34 1";
+	maxAmmo = 8;
+};
+
+datablock ShapeBaseImageData(MSniperRifleImage : RustyRifleImage)
+{
+	shapeFile = "./assets/rifles/sniperRifle.dts";
+	colorShiftColor = MSniperRifleItem.colorShiftColor;
+	projectile = MSniperRifleProjectile;
+
+	item = MSniperRifleItem;
+
+	stateSound[2] = HeavyRifleFireSound;
+
+	stateTimeoutValue[2] = 0.3; //increase fire state time (0.3 >> 0.3)
+	stateTimeoutValue[3] = 0.4; //increase smoke time (0.2 >> 0.4)
+	stateTimeoutValue[4] = 0.8; //increase bolt time (0.8 >> 0.8)
+
+	stateTimeoutValue[9] = 1.2; //increase reload time (0.8 >> 1.2)
+	stateTimeoutValue[11] = 1.2; //increase reload time (0.8 >> 1.2)
+};
+
+function MSniperRifleImage::onFire(%this, %obj, %slot)
+{
+	return Rifle_onFire(%this, %obj, %slot);
+}
+
+function MSniperRifleImage::onEject(%this, %obj, %slot)
+{
+	Rifle_onEject(%this, %obj, %slot);
+}
+
+function MSniperRifleImage::onReloadStart(%this, %obj, %slot)
+{
+	Rifle_onReloadStart(%this, %obj, %slot);
+}
+
+function MSniperRifleImage::onMount(%this, %obj, %slot)
+{
+	Parent::onMount(%this, %obj, %slot);
+	Rifle_onMount(%this, %obj, %slot);
+}
+
+function MSniperRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
+{
+	RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal);
 }
