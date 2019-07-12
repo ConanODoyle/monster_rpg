@@ -97,6 +97,7 @@ package AmmoGuns2
 	function WeaponImage::onReloaded(%this,%obj,%slot)
 	{
 		%obj.toolAmmo[%obj.currTool]++;
+		centerprintToolAmmoString(%this, %obj, %slot);
 	}
 	
 	function servercmdDropTool(%client,%slot)

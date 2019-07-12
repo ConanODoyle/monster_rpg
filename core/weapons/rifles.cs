@@ -45,6 +45,11 @@ function Rifle_onMount(%this, %obj, %slot)
 	centerprintToolAmmoString(%this, %obj, %slot);
 }
 
+function Rifle_onReloaded(%this, %obj, %slot)
+{
+	centerprintToolAmmoString(%this, %obj, %slot);
+}
+
 function RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal)
 {
 	if(%this.directDamage <= 0)
@@ -412,7 +417,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTimeoutValue[1]            	= 0.05;
 	stateScript[1]                  	= "onDisplay";
 	stateTransitionOnTriggerDown[1] 	= "Fire";
-	stateTransitionOnNoAmmo[1]			= "ReloadCheckA";
+	stateTransitionOnNoAmmo[1]			= "ReloadedA";
 	stateAllowImageChange[1]			= true;
 	stateSequence[1]					= "ready";
 
@@ -453,12 +458,12 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTransitionOnAmmo[6]			= "Ready";
 	stateTransitionOnNoAmmo[6]			= "ForceReload";
 	
-	stateName[7]						= "ReloadCheckA";
-	stateScript[7]						= "onReloadCheck";
+	stateName[7]						= "ReloadedA";
+	stateScript[7]						= "onReloaded";
 	stateTimeoutValue[7]				= 0.01;
-	stateTransitionOnTimeout[7]			= "ReloadCheckB";
+	stateTransitionOnTimeout[7]			= "ReloadedB";
 						
-	stateName[8]						= "ReloadCheckB";
+	stateName[8]						= "ReloadedB";
 	stateTransitionOnAmmo[8]			= "CompleteReload";
 	stateTransitionOnNoAmmo[8]			= "Reload";
 						
@@ -470,7 +475,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateScript[9]						= "onReloadStart";
 	
 	stateName[10]						= "ForceReloaded";
-	stateTransitionOnTimeout[10]		= "ReloadCheckA";
+	stateTransitionOnTimeout[10]		= "ReloadedA";
 	stateTimeoutValue[10]				= 0.2;
 	stateScript[10]						= "onReloaded";
 	
@@ -484,7 +489,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateScript[11]						= "onReloadStart";
 	
 	stateName[12]						= "Reloaded";
-	stateTransitionOnTimeout[12]     	= "ReloadCheckA";
+	stateTransitionOnTimeout[12]     	= "ReloadedA";
 	stateTransitionOnTriggerDown[12]	= "Fire";
 	stateWaitForTimeout[12]				= false;
 	stateTimeoutValue[12]				= 0.2;
@@ -518,6 +523,12 @@ function RustyRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function RustyRifleImage::onReloaded(%this, %obj, %slot)
+{
+	Parent::onReloaded(%this, %obj, %slot);
+	Rifle_onReloaded(%this, %obj, %slot);
 }
 
 function RustyRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
@@ -583,6 +594,12 @@ function CleanRifleImage::onMount(%this, %obj, %slot)
 	Rifle_onMount(%this, %obj, %slot);
 }
 
+function CleanRifleImage::onReloaded(%this, %obj, %slot)
+{
+	Parent::onReloaded(%this, %obj, %slot);
+	Rifle_onReloaded(%this, %obj, %slot);
+}
+
 function CleanRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
 {
 	RifleProjectile_damage(%this, %obj, %col, %fade, %pos, %normal);
@@ -644,6 +661,12 @@ function PolishedRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function PolishedRifleImage::onReloaded(%this, %obj, %slot)
+{
+	Parent::onReloaded(%this, %obj, %slot);
+	Rifle_onReloaded(%this, %obj, %slot);
 }
 
 function PolishedRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
@@ -709,6 +732,12 @@ function MSniperRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function MSniperRifleImage::onReloaded(%this, %obj, %slot)
+{
+	Parent::onReloaded(%this, %obj, %slot);
+	Rifle_onReloaded(%this, %obj, %slot);
 }
 
 function MSniperRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal)
