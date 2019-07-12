@@ -57,7 +57,7 @@ $RPGData_Goblin.maxBackwardSpeed = 2.8;
 $RPGData_Goblin.maxSideSpeed = 2.8;
 $RPGData_Goblin.maxYawSpeed = 10;
 $RPGData_Goblin.maxPitchSpeed = 10;
-$RPGData_Goblin.scale = "1 1 1";
+$RPGData_Goblin.scale = "0.8 0.8 0.8";
 $RPGData_Goblin.botDB = "PlayerStandardArmor";
 $RPGData_Goblin.canJump = 1;
 
@@ -94,7 +94,7 @@ $RPGData_GoblinArcher.maxBackwardSpeed = 0;
 $RPGData_GoblinArcher.maxSideSpeed = 0;
 $RPGData_GoblinArcher.maxYawSpeed = 5;
 $RPGData_GoblinArcher.maxPitchSpeed = 5;
-$RPGData_GoblinArcher.scale = "1 1 1";
+$RPGData_GoblinArcher.scale = "0.8 0.8 0.8";
 $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
 
 
