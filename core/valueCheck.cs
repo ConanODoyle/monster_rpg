@@ -13,5 +13,5 @@ package MRPG_ValueCheckPackage
 		}
 		return %ret;
 	}
-}
+};
 schedule(100, 0, activatePackage, MRPG_ValueCheckPackage);
