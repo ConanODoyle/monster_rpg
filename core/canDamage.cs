@@ -2,7 +2,15 @@ package MRPG_CanDamagePackage
 {
 	function minigameCanDamage(%obj, %target)
 	{
-		%cl1 = %obj.client;
+		if (%obj.getType() != 0)
+		{
+			%cl1 = %obj.client;
+		}
+		else
+		{
+			%cl1 = %obj;
+		}
+
 		%cl2 = %target.client;
 		if (isObject(%obj.RPGData) || isObject(%target.RPGData))
 		{

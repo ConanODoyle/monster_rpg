@@ -163,6 +163,7 @@ function MRPGBot_simpleAction(%bot)
 		%bot.target = "";
 		%bot.setMoveX(0);
 		%bot.setMoveY(0);
+		%bot.setJumping(0);
 		if (isObject(%bot.getAimObject()))
 		{
 			%bot.setAimObject("");
