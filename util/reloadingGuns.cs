@@ -35,8 +35,17 @@ function centerprintToolAmmoString(%this, %obj, %slot)
 {
 	%cl = %obj.client;
 	%currAmmo = %obj.toolAmmo[%obj.currTool];
+	%str = "\c3";
+	for (%i = 0; %i < %this.item.maxAmmo; %i++)
+	{
+		if (%i >= %currAmmo)
+		{
+			%str = %str @ "\c7";
+		}
+		%str = %str @ "|";
+	}
 	if (isObject(%cl))
 	{
-		%cl.centerprint("<just:right><font:Consolas:24>\c3" @ %currAmmo @ " / " @ %this.item.maxAmmo @ " ", 4);
+		%cl.centerprint("<just:right><font:Consolas:24>\c3Ammo: " @ %str @ " ", 4);
 	}
 }

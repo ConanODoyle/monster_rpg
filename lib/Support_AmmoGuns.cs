@@ -7,9 +7,9 @@
 //The weapon firing sequence should decrement ammo in the firing method (WeaponImage::onFire or otherwise) and set image ammo to trigger reloads
 //The state system is individual for each weapon so this is not performed automatically
 //
-//function WeaponImage::onFire(%this,%obj,%slot)
+//function WeaponImage::onFire(%this, %obj, %slot)
 //{
-//	... other weapon firing code or Parent::onFire(%this,%obj,%slot) ...
+//	... other weapon firing code or Parent::onFire(%this, %obj, %slot) ...
 //
 //	%obj.toolAmmo[%obj.currTool]]--;
 //}
@@ -64,9 +64,9 @@ package AmmoGuns2
 		Parent::onAdd(%this,%obj);
 	}
 	
-	function WeaponImage::onMount(%this,%obj,%slot)
+	function WeaponImage::onMount(%this, %obj, %slot)
 	{	
-		Parent::onMount(%this,%obj,%slot);
+		Parent::onMount(%this, %obj, %slot);
 		
 		//If using one of the "force mount item" events, set the ammo to maximum
 		if(%this.item.maxAmmo >= 0 && (%obj.currTool == -1 || %obj.toolAmmo[%obj.currTool] $= ""))
@@ -76,28 +76,41 @@ package AmmoGuns2
 	}
 	
 	//Check if the gun needs to reload. Use this to trigger state changes.
-	function WeaponImage::onLoadCheck(%this,%obj,%slot)
+	function WeaponImage::onLoadCheck(%this, %obj, %slot)
 	{
 		if(%obj.toolAmmo[%obj.currTool] <= 0 && %this.item.maxAmmo > 0 && %obj.getState() !$= "Dead")
-			%obj.setImageAmmo(%slot,0);
+			%obj.setImageAmmo(%slot, 0);
 		else
-			%obj.setImageAmmo(%slot,1);
+			%obj.setImageAmmo(%slot, 1);
 	}
 	
 	//Use this state in single-ammo reload weapons e.g. Shotgun, Scattergun
-	function WeaponImage::onReloadCheck(%this,%obj,%slot)
+	function WeaponImage::onReloadCheck(%this, %obj, %slot)
 	{
 		if(%obj.toolAmmo[%obj.currTool] < %this.item.maxAmmo && %this.item.maxAmmo > 0 && %obj.getState() !$= "Dead")
-			%obj.setImageAmmo(%slot,0);
+			%obj.setImageAmmo(%slot, 0);
 		else
-			%obj.setImageAmmo(%slot,1);
+			%obj.setImageAmmo(%slot, 1);
 	}
 	
 	//Example, you may wish to have weapons load all at once
-	function WeaponImage::onReloaded(%this,%obj,%slot)
+	function WeaponImage::onReloaded(%this, %obj, %slot)
 	{
 		%obj.toolAmmo[%obj.currTool]++;
 		centerprintToolAmmoString(%this, %obj, %slot);
+	}
+
+	function WeaponImage::onReloadComplete(%this, %obj, %slot)
+	{
+		if (%obj.toolAmmo[%obj.currTool] >= %this.item.maxAmmo)
+		{
+			%obj.toolAmmo[%obj.currTool] = %this.item.maxAmmo;
+			%obj.setImageAmmo(%slot, 1);
+		}
+		else
+		{
+			%obj.setImageAmmo(%slot, 0);
+		}
 	}
 	
 	function servercmdDropTool(%client,%slot)

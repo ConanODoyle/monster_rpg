@@ -47,6 +47,7 @@ function Rifle_onMount(%this, %obj, %slot)
 
 function Rifle_onReloaded(%this, %obj, %slot)
 {
+	%obj.toolAmmo[%obj.currTool] = %this.item.maxAmmo;
 	centerprintToolAmmoString(%this, %obj, %slot);
 }
 
@@ -409,7 +410,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateName[0]						= "Activate";
 	stateTimeoutValue[0]				= 0.15;
 	stateSequence[0]					= "Activate";
-	stateTransitionOnTimeout[0]			= "Ready";
+	stateTransitionOnTimeout[0]			= "Bolt";
 	stateSound[0]						= weaponSwitchSound;
 
 	stateName[1]                    	= "Ready";
@@ -459,7 +460,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTransitionOnNoAmmo[6]			= "ForceReload";
 	
 	stateName[7]						= "ReloadedA";
-	stateScript[7]						= "onReloaded";
+	stateScript[7]						= "onReloadComplete";
 	stateTimeoutValue[7]				= 0.01;
 	stateTransitionOnTimeout[7]			= "ReloadedB";
 						
@@ -469,7 +470,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 						
 	stateName[9]						= "ForceReload";
 	stateTransitionOnTimeout[9]			= "ForceReloaded";
-	stateTimeoutValue[9]				= 0.8;
+	stateTimeoutValue[9]				= 1.4;
 	stateSequence[9]					= "Fire";
 	stateSound[9]						= BrickMoveSound;
 	stateScript[9]						= "onReloadStart";
@@ -483,7 +484,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTransitionOnTimeout[11]		= "Reloaded";
 	stateTransitionOnTriggerDown[11]	= "Fire";
 	stateWaitForTimeout[11]				= false;
-	stateTimeoutValue[11]				= 0.8;
+	stateTimeoutValue[11]				= 1.4;
 	stateSequence[11]					= "Fire";
 	stateSound[11]						= BrickMoveSound;
 	stateScript[11]						= "onReloadStart";
@@ -499,7 +500,7 @@ datablock ShapeBaseImageData(RustyRifleImage)
 	stateTimeoutValue[13]				= 1.0;
 	stateTransitionOnTimeout[13]		= "Ready";
 	stateWaitForTimeout[13]				= true;
-	stateSequence[13]					= "Reload";
+	stateSequence[13]					= "bolt";
 	stateSound[13]						= RifleReloadSound;
 	stateScript[13]						= "onEject";
 };
@@ -523,6 +524,11 @@ function RustyRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function RustyRifleImage::onLoadCheck(%this, %obj, %slot)
+{
+	Parent::onLoadCheck(%this, %obj, %slot);
 }
 
 function RustyRifleImage::onReloaded(%this, %obj, %slot)
@@ -569,8 +575,8 @@ datablock ShapeBaseImageData(CleanRifleImage : RustyRifleImage)
 	stateTimeoutValue[3] = 0.15; //reduce smoke time (0.3 >> 0.15)
 	stateTimeoutValue[4] = 0.7; //reduce bolt time (0.8 >> 0.7)
 
-	stateTimeoutValue[9] = 0.6; //reduce reload time (0.8 >> 0.6)
-	stateTimeoutValue[11] = 0.6; //reduce reload time (0.8 >> 0.6)
+	stateTimeoutValue[9] = 1; //reduce reload time (1.4 >> 1)
+	stateTimeoutValue[11] = 1; //reduce reload time (1.4 >> 1)
 };
 
 function CleanRifleImage::onFire(%this, %obj, %slot)
@@ -592,6 +598,11 @@ function CleanRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function CleanRifleImage::onLoadCheck(%this, %obj, %slot)
+{
+	Parent::onLoadCheck(%this, %obj, %slot);
 }
 
 function CleanRifleImage::onReloaded(%this, %obj, %slot)
@@ -638,8 +649,8 @@ datablock ShapeBaseImageData(PolishedRifleImage : RustyRifleImage)
 	stateTimeoutValue[3] = 0.05; //reduce smoke time (0.15 >> 0.05)
 	stateTimeoutValue[4] = 0.7; //reduce bolt time (0.7 >> 0.7)
 
-	stateTimeoutValue[9] = 0.4; //reduce reload time (0.6 >> 0.4)
-	stateTimeoutValue[11] = 0.4; //reduce reload time (0.6 >> 0.4)
+	stateTimeoutValue[9] = 0.8; //reduce reload time (1 >> 0.8)
+	stateTimeoutValue[11] = 0.8; //reduce reload time (1 >> 0.8)
 };
 
 function PolishedRifleImage::onFire(%this, %obj, %slot)
@@ -663,6 +674,11 @@ function PolishedRifleImage::onMount(%this, %obj, %slot)
 	Rifle_onMount(%this, %obj, %slot);
 }
 
+function PolishedRifleImage::onLoadCheck(%this, %obj, %slot)
+{
+	Parent::onLoadCheck(%this, %obj, %slot);
+}
+
 function PolishedRifleImage::onReloaded(%this, %obj, %slot)
 {
 	Parent::onReloaded(%this, %obj, %slot);
@@ -681,7 +697,7 @@ function PolishedRifleProjectile::damage(%this, %obj, %col, %fade, %pos, %normal
 
 datablock ProjectileData(MSniperRifleProjectile : RustyRifleProjectile)
 {
-	directDamage = 180;
+	directDamage = 200;
 	muzzleVelocity = 200;
 };
 
@@ -703,14 +719,15 @@ datablock ShapeBaseImageData(MSniperRifleImage : RustyRifleImage)
 
 	item = MSniperRifleItem;
 
+	stateTransitionOnTimeout[0]			= "Smoke"; //make q spam slower than actually firing normally
 	stateSound[2] = HeavyRifleFireSound;
 
-	stateTimeoutValue[2] = 0.3; //increase fire state time (0.3 >> 0.3)
-	stateTimeoutValue[3] = 0.4; //increase smoke time (0.2 >> 0.4)
+	stateTimeoutValue[2] = 0.5; //increase fire state time (0.3 >> 0.5)
+	stateTimeoutValue[3] = 0.6; //increase smoke time (0.2 >> 0.6)
 	stateTimeoutValue[4] = 0.8; //increase bolt time (0.8 >> 0.8)
 
-	stateTimeoutValue[9] = 1.2; //increase reload time (0.8 >> 1.2)
-	stateTimeoutValue[11] = 1.2; //increase reload time (0.8 >> 1.2)
+	stateTimeoutValue[9] = 1.8; //increase reload time (1.4 >> 1.8)
+	stateTimeoutValue[11] = 1.8; //increase reload time (1.4 >> 1.8)
 };
 
 function MSniperRifleImage::onFire(%this, %obj, %slot)
@@ -732,6 +749,11 @@ function MSniperRifleImage::onMount(%this, %obj, %slot)
 {
 	Parent::onMount(%this, %obj, %slot);
 	Rifle_onMount(%this, %obj, %slot);
+}
+
+function MSniperRifleImage::onLoadCheck(%this, %obj, %slot)
+{
+	Parent::onLoadCheck(%this, %obj, %slot);
 }
 
 function MSniperRifleImage::onReloaded(%this, %obj, %slot)
