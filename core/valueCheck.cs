@@ -11,6 +11,7 @@ package MRPG_ValueCheckPackage
 			%cl.level = 1;
 			%cl.class = "None";
 		}
+		%cl.exp = %cl.exp | 0;
 		return %ret;
 	}
 
@@ -25,6 +26,7 @@ package MRPG_ValueCheckPackage
 			%cl.level = 1;
 			%cl.class = "None";
 		}
+		%cl.exp = %cl.exp | 0;
 		return %ret;
 	}
 };
