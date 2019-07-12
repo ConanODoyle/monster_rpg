@@ -86,7 +86,7 @@ function getBestQValue(%state)
 	%learnedVals = $Q_[%state];
 	for (%i = 0; %i < getWordCount(%learnedVals); %i++)
 	{
-		%curr = getWord(%learnedVals, %i)
+		%curr = getWord(%learnedVals, %i);
 		if (%best $= "" || %best < %curr)
 		{
 			%best = %curr;
