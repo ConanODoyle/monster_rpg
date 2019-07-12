@@ -79,6 +79,7 @@ function MRPGBot_simpleLogic(%bot)
 	
 	if (isObject(%bot.target))
 	{
+		%bot.ticksNoTarget = 0;
 		if (%bot.target.isDisabled())
 		{
 			%bot.target = "";
@@ -90,6 +91,15 @@ function MRPGBot_simpleLogic(%bot)
 				%bot.target = "";
 			}
 		}
+	}
+	else
+	{
+		%bot.ticksNoTarget++;
+	}
+
+	if (%bot.ticksNoTarget > 300)
+	{
+		%bot.delete();
 	}
 
 	if (!isObject(%bot.target))
@@ -110,7 +120,7 @@ function MRPGBot_simpleLogic(%bot)
 		}
 	}
 	else if (isObject(%bot.target))
-	{	
+	{
 		if (isFunction(%searchData.searchFunction))
 		{
 			%val = call(%searchData.searchFunction, %bot);

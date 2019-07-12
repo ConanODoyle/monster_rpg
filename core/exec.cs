@@ -15,5 +15,6 @@ echo("");
 echo("--Executing mobs--");
 exec("./ai/mobs/goblin.cs");
 
-// echo("");
-// echo("--Executing weapons--");
+echo("");
+echo("--Executing weapons--");
+exec("./weapons/rifles.cs");
