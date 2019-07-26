@@ -33,7 +33,7 @@ function GameConnection::levelUp(%cl, %amt)
 		
 		if (%amt > 0)
 		{
-			%pl.setDamageLevel(%pl.getDamageLevel() - %pl.getDatablock().maxDamage * 0.1); //heal 10% on level up
+			%pl.setDamageLevel(%pl.getDamageLevel() - %pl.getDatablock().maxDamage * 0.2); //heal 20% on level up
 		}
 	}
 	%cl.playSound(rewardSound);

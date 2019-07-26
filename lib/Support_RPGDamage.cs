@@ -148,6 +148,7 @@ function getModifiedDamage(%proj, %level, %armor, %resist, %damage, %isRadius)
 		else
 		{
 			%damage = %levelMod * %rawDamage;
+			error(%projDB.getName() @ " has no damage type!");
 		}
 	}
 	else
