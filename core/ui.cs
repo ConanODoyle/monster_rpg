@@ -99,7 +99,18 @@ function bottomprintInfo(%cl)
 	}
 
 	%exp = "\c3Level " @ %cl.level + 0 @ " \c5" @ %exp @ "/" @ %levelExp;
-	%gold = "<just:right>\c3Gold: " @ mFloor(%cl.score) @ " ";
+	
+	%score = mFloor(%cl.score);
+	if (%score >= 1000)
+	{
+		%score = mFloatLength(%score / 1000, 2) @ "K";
+	}
+	if (%score >= 1000)
+	{
+		%score = mFloatLength(%score / 1000, 2) @ "M";
+	}
+
+	%gold = "<just:right>\c3Gold: " @ %score @ " ";
 
 	%cl.bottomprint("<font:Consolas:24>" @ %hpbars SPC %hp @ %gold @ "<br><just:left>" @ %expBars SPC %exp, -1, 0);
 }
