@@ -35,7 +35,8 @@ function Rifle_onEject(%this, %obj, %slot)
 function Rifle_onReloadStart(%this, %obj, %slot)
 {
 	%obj.playThread(2, shiftright);
-	%obj.schedule(100, playThread, 2, plant);
+	%obj.schedule(500, playThread, 2, plant);
+	%obj.schedule(500, playAudio, 0, brickPlantSound);
 
 	centerprintToolAmmoString(%this, %obj, %slot);
 }
@@ -209,7 +210,7 @@ datablock ParticleEmitterData(RifleExplosionEmitter)
 datablock ExplosionData(RifleExplosion)
 {
 	//explosionShape = "";
-	// soundProfile = RifleRicochetSound;
+	soundProfile = bulletHitSound;//RifleRicochetSound;
 
 	lifeTimeMS = 150;
 
