@@ -1,4 +1,4 @@
-package MRPG_ValueCheckPackage
+package MRPG_PlayerLevelNullCheck
 {
 	function GameConnection::onClientEnterGame(%cl)
 	{
@@ -30,4 +30,14 @@ package MRPG_ValueCheckPackage
 		return %ret;
 	}
 };
-schedule(100, 0, activatePackage, MRPG_ValueCheckPackage);
+schedule(100, 0, activatePackage, MRPG_PlayerLevelNullCheck);
+
+function GameConnection::resetLevel(%cl)
+{
+	%cl.maxDamage = 100;
+	%cl.armor = 0;
+	%cl.resist = 0;
+	%cl.level = 1;
+	%cl.class = "None";
+	%cl.exp = 0 | 0;
+}
