@@ -11,6 +11,8 @@
 // - resist
 // - level
 
+//formula: totalDamage = levelDiff * sqrt(levelDiff) * getMax(damage / 20, damage - resistAmount)
+
 package MRPG_DamagePackage
 {
 	function Armor::damage(%db, %obj, %sourceObj, %pos, %damage, %damageType)
