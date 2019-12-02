@@ -2,6 +2,7 @@ exec("./ui.cs");
 exec("./canDamage.cs");
 exec("./persistence.cs");
 exec("./playerLevels.cs");
+exec("./classes.cs");
 
 echo("");
 echo("--Executing AI--");
