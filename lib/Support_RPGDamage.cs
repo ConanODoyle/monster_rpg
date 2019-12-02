@@ -44,9 +44,9 @@ package MRPG_DamagePackage
 		{
 			%damageType = %this.DirectDamageType;
 		}
-		%scale = getWord(%obj.getScale(), 2);
+		// %scale = getWord(%obj.getScale(), 2);
 		// %directDamage = mClampF(%this.directDamage, -100.0, 100) * %scale;
-		%directDamage = %this.directDamage * %scale; //remove damage limiter
+		%directDamage = %this.directDamage; //* %scale; //remove damage limiter AND scaling factor
 		if (%col.getType() & $TypeMasks::PlayerObjectType)
 		{
 			%col.Damage(%obj, %pos, %directDamage, %damageType);
