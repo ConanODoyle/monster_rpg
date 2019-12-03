@@ -47,12 +47,12 @@ package MRPG_PlayerLevelNullCheck
 		if (%amt > 0) 
 		{
 			announce("\c2" @ %cl.name @ " has leveled up to \c4Level " @ %cl.level @ "\c2! (+" @ %amt @ ")");
-			echo(getDateTime() @ " - " @ %cl.getPlayerName() @ " has leveled up to Level " @ %cl.level @ "! (+" @ %amt @ ")"));
+			echo(getDateTime() @ " - " @ %cl.getPlayerName() @ " has leveled up to Level " @ %cl.level @ "! (+" @ %amt @ ")");
 		}
 		else
 		{
 			announce("\c0" @ %cl.name @ "has leveled down to \c4Level " @ %cl.level @ "\c0! (" @ %amt @ ")");
-			echo(getDateTime() @ " - " @ %cl.getPlayerName() @ " has leveled down to Level " @ %cl.level @ "! (" @ %amt @ ")"));
+			echo(getDateTime() @ " - " @ %cl.getPlayerName() @ " has leveled down to Level " @ %cl.level @ "! (" @ %amt @ ")");
 		}
 
 		%cl.playSound(rewardSound);
@@ -85,7 +85,7 @@ function GameConnection::applyClassData(%cl, %class)
 
 	if (%class $= "None" || !isObject($MRPGClass_[%class]))
 	{
-		messageClient(%cl, '', "\c2Your class has been set to \c4None\c2!")
+		messageClient(%cl, '', "\c2Your class has been set to \c4None\c2!");
 		echo(getDateTime() @ " - " @ %cl.name @ " has had their class set to None");
 		%level = %cl.level;
 		%exp = %cl.exp | 0;
@@ -95,7 +95,7 @@ function GameConnection::applyClassData(%cl, %class)
 		return;
 	}
 
-	messageClient(%cl, '', "\c2Your class has been set to \c4" @ %class @ "\c2!")
+	messageClient(%cl, '', "\c2Your class has been set to \c4" @ %class @ "\c2!");
 	echo(getDateTime() @ " - " @ %cl.name @ " has had their class to set to " @ %class);
 
 	%classObj = $MRPGClass_[%class];

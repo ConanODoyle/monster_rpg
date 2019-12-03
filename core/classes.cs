@@ -1,5 +1,5 @@
 $MRPGClass_Swordsman = new ScriptObject(MRPGClasses) {
-	class = "Swordsman";
+	mrpgclass = "Swordsman";
 	armor = 3;
 	armorPerLevel = "1 + 0.25 * x";
 	resist = 3;
@@ -9,7 +9,7 @@ $MRPGClass_Swordsman = new ScriptObject(MRPGClasses) {
 };
 
 $MRPGClass_Bowman = new ScriptObject(MRPGClasses) {
-	class = "Bowman";
+	mrpgclass = "Bowman";
 	armor = 1;
 	armorPerLevel = "0.5";
 	resist = 1;
@@ -19,7 +19,7 @@ $MRPGClass_Bowman = new ScriptObject(MRPGClasses) {
 };
 
 $MRPGClass_Gunman = new ScriptObject(MRPGClasses) {
-	class = "Gunman";
+	mrpgclass = "Gunman";
 	armor = 1;
 	armorPerLevel = "0.75";
 	resist = 1;
@@ -29,7 +29,7 @@ $MRPGClass_Gunman = new ScriptObject(MRPGClasses) {
 };
 
 $MRPGClass_Mage = new ScriptObject(MRPGClasses) {
-	class = "Mage";
+	mrpgclass = "Mage";
 	armor = 0;
 	armorPerLevel = "0.5";
 	resist = 2;
@@ -39,7 +39,7 @@ $MRPGClass_Mage = new ScriptObject(MRPGClasses) {
 };
 
 $MRPGClass_Healer = new ScriptObject(MRPGClasses) {
-	class = "Healer";
+	mrpgclass = "Healer";
 	armor = 1;
 	armorPerLevel = "0.5";
 	resist = 1;
