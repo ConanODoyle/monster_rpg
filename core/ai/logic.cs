@@ -73,6 +73,10 @@ function MRPGBot_simpleLogic(%bot)
 		%bot.nextThink = $sim::time + 20;
 		return;
 	}
+	else if (!isObject(%bot))
+	{
+		return;
+	}
 
 	%data = %bot.RPGData;
 	%searchData = %data.searchType;
@@ -158,6 +162,10 @@ function MRPGBot_simpleAction(%bot)
 	else if (%bot.isDisabled())
 	{
 		clearTriggers(%bot);
+		return;
+	}
+	else if (!isObject(%bot))
+	{
 		return;
 	}
 	
