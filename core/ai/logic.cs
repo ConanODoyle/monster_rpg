@@ -67,14 +67,14 @@ function MRPGBot_simpleLogic(%bot)
 	{
 		return;
 	}
+	else if (!isObject(%bot))
+	{
+		return;
+	}
 	else if (%bot.isDisabled())
 	{
 		clearTriggers(%bot);
 		%bot.nextThink = $sim::time + 20;
-		return;
-	}
-	else if (!isObject(%bot))
-	{
 		return;
 	}
 
@@ -159,13 +159,13 @@ function MRPGBot_simpleAction(%bot)
 	{
 		return;
 	}
+	else if (!isObject(%bot))
+	{
+		return;
+	}
 	else if (%bot.isDisabled())
 	{
 		clearTriggers(%bot);
-		return;
-	}
-	else if (!isObject(%bot))
-	{
 		return;
 	}
 	
