@@ -3,7 +3,8 @@ exec("./canDamage.cs");
 exec("./persistence.cs");
 exec("./playerLevels.cs");
 exec("./classes.cs");
-exec("./gameControl.cs");
+// exec("./arena.cs");
+// exec("./gameControl.cs");
 
 echo("");
 echo("--Executing AI--");
