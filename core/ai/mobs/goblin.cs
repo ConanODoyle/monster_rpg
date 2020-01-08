@@ -61,6 +61,8 @@ $RPGData_Goblin.scale = "0.8 0.8 0.8";
 $RPGData_Goblin.botDB = "PlayerStandardArmor";
 $RPGData_Goblin.canJump = 1;
 
+$RPGData_Goblin.botSize = "small";
+
 
 
 
@@ -97,6 +99,7 @@ $RPGData_GoblinArcher.maxPitchSpeed = 5;
 $RPGData_GoblinArcher.scale = "0.8 0.8 0.8";
 $RPGData_GoblinArcher.botDB = "PlayerStandardArmor";
 
+$RPGData_GoblinArcher.botSize = "small";
 
 
 datablock ProjectileData(goblinSwordProjectile : swordProjectile)

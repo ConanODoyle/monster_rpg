@@ -197,8 +197,8 @@ function MRPGBot_simpleAction(%bot)
 		}
 		%bot.setAimObject(%bot.target);
 
-		%zDiff = getWord(%bot.target.position, 2) - getWord(%bot.position, 2);
-		if (%bot.canJump && %zDiff > 1.2 && getRandom() < 0.08 * %zDiff)
+		%zDiff = getWord(%bot.target.position, 2) - getWord(%bot.position, 2) + 0.0001;
+		if (%bot.canJump && %zDiff > 1.2 && getRandom() < 0.01 * %zDiff)
 		{
 			%bot.setJumping(1);
 		}
