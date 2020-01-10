@@ -1,26 +1,20 @@
-datablock ShapeBaseImageData(MaceAndShieldImage)
+datablock ShapeBaseImageData(MaceAndShieldImageA)
 {
 	shapeFile = "./assets/maceshield/maceshield.dts";
 	emap = true;
 
 	mountPoint = 0;
 	offset = "0 0 0";
-	eyeOffset = 0; //"0.7 1.2 -0.5";
+	eyeOffset = "0.75 1.2 -0.5"; //"0.7 1.2 -0.5";
 	rotation = eulerToMatrix( "0 0 0" );
 
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = MaceAndShieldItem;
-	ammo = " ";
-	projectile = MaceAndShieldProjectile;
+	// item = MaceAndShieldItem;
+	// projectile = MaceAndShieldProjectile;
+	projectile = swordProjectile;
 	projectileType = Projectile;
-
-	casing = GunShellDebris;
-	shellExitDir        = "1.0 0.1 1.0";
-	shellExitOffset     = "0 0 0";
-	shellExitVariance   = 10.0;	
-	shellVelocity       = 5.0;
 
 	//melee particles shoot from eye node for consistancy
 	melee = true;
@@ -37,41 +31,59 @@ datablock ShapeBaseImageData(MaceAndShieldImage)
 
 	// Initial start up state
 	stateName[0]							= "Activate";
-	stateTimeoutValue[0]					= 0.2;
+	stateTimeoutValue[0]					= 0.4;
 	stateSequence[0]						= "Equip";
 	stateTransitionOnTimeout[0]		= "Ready";
 	stateSound[0]							= weaponSwitchSound;
 
 	stateName[1]							= "Ready";
-	stateTransitionOnTriggerDown[1]	= "Attack";
+	stateTransitionOnTriggerDown[1]	= "Attack1";
 	stateScript[1]							= "onReady";
 	stateSequence[1]						= "Ready";
-	// stateTransitionOnTimeout[1]		= "Ready";
-	// stateTimeoutValue[1]					= 0.1;
 
-	stateName[2]							= "Attack";
-	stateTransitionOnTimeout[2]		= "Recovery";
+	stateName[2]							= "Attack1";
+	stateTransitionOnTimeout[2]		= "Recovery1";
 	stateScript[2]							= "onAttack";
 	stateTimeoutValue[2]					= 0.2;
-	stateSequence[2]						= "Attack";
+	stateSequence[2]						= "Attack1";
 
-	stateName[3]							= "Recovery";
+	stateName[3]							= "Recovery1";
 	stateScript[3]							= "onRecovery";
-	stateTimeoutValue[3]					= 0.2;
-	stateTransitionOnTimeout[3]		= "Ready";
+	stateSequence[3]						= "Recovery1";
+	stateTimeoutValue[3]					= 0.4;
+	stateTransitionOnTimeout[3]		= "Ready2";
+
+	stateName[4]							= "Ready2";
+	stateTransitionOnTriggerDown[4]	= "Attack2";
+	stateScript[4]							= "onReady";
+	// stateSequence[4]						= "Ready";
+	stateTransitionOnTimeout[4]		= "Ready";
+	stateTimeoutValue[4]					= 0.8;
+
+	stateName[5]							= "Attack2";
+	stateTransitionOnTimeout[5]		= "Recovery2";
+	stateScript[5]							= "onAttack";
+	stateTimeoutValue[5]					= 0.2;
+	stateSequence[5]						= "Attack2";
+
+	stateName[6]							= "Recovery2";
+	stateScript[6]							= "onRecovery";
+	stateSequence[6]						= "Recovery2";
+	stateTimeoutValue[6]					= 0.4;
+	stateTransitionOnTimeout[6]		= "Ready";
 };
 
-function MaceAndShieldImage::onMount(%this, %obj, %slot)
+function MaceAndShieldImageA::onMount(%this, %obj, %slot)
 {
 	%obj.canShieldBlock = 1;
-	%obj.playThread(1, armReadyRight);
+	%obj.playThread(1, armReadyBoth);
 	%obj.hideNode("rhand");
 	%obj.hideNode("rhook");
 	%obj.hideNode("lhand");
 	%obj.hideNode("lhook");
 }
 
-function MaceAndShieldImage::onUnmount(%this, %obj, %slot)
+function MaceAndShieldImageA::onUnmount(%this, %obj, %slot)
 {
 	%obj.canShieldBlock = 0;
 	if (isObject(%cl = %obj.client))
@@ -86,27 +98,45 @@ function MaceAndShieldImage::onUnmount(%this, %obj, %slot)
 	}
 }
 
-function MaceAndShieldImage::onReady(%this, %obj, %slot)
+function MaceAndShieldImageA::onReady(%this, %obj, %slot)
 {
 	%obj.canShieldBlock = 1;
+
+	if (%obj.canShieldBlock && %obj.rmbDown)
+	{
+		%obj.canShieldBlock = 0;
+		%obj.mountImage(ShieldBlockImageA, 0);
+		return;
+	}
 }
 
-function MaceAndShieldImage::onAttack(%this, %obj, %slot)
+function MaceAndShieldImageA::onAttack(%this, %obj, %slot)
+{
+	%obj.canShieldBlock = 0;
+
+	%p = new Projectile()
+	{
+		dataBlock = %this.projectile;
+		initialPosition = vectorAdd(%obj.getEyeTransform(), %obj.getEyeVector());
+		initialVelocity = vectorAdd(vectorScale(%obj.getEyeVector(), %this.projectile.muzzleVelocity),
+			vectorScale(%obj.getVelocity(), %this.projectile.velInheritFactor));
+		client = %obj.client;
+		sourceClient = %obj.client;
+		sourceObj = %obj;
+	};
+}
+
+function MaceAndShieldImageA::onRecovery(%this, %obj, %slot)
 {
 	%obj.canShieldBlock = 0;
 }
 
-function MaceAndShieldImage::onRecovery(%this, %obj, %slot)
-{
-	%obj.canShieldBlock = 1;
-}
-
-datablock ShapeBaseImageData(ShieldBlockImage : MaceAndShieldImage)
+datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 {
 	stateName[0]							= "Parry";
 	stateTimeoutValue[0]					= 0.2;
 	stateSequence[0]						= "Block";
-	stateTransitionOnTimeout[0]		= "Block";
+	stateTransitionOnTimeout[0]		= "Block1";
 	stateAllowImageChange[0]			= false;
 	stateSound[0]							= weaponSwitchSound;
 
@@ -116,34 +146,54 @@ datablock ShapeBaseImageData(ShieldBlockImage : MaceAndShieldImage)
 	stateSequence[1]						= "";
 	stateAllowImageChange[1]			= false;			//timeout swapping weapons/back to normal mace for 0.4s total
 	stateTransitionOnTimeout[1]		= "Block2";
-	stateTimeoutValue[1]					= 0.2;
+	stateTimeoutValue[1]					= 0.4;
 
 	stateName[2]							= "Block2";
-	stateTransitionOnTimeout[2]		= "";
+	stateTransitionOnTimeout[2]		= "Block2b";
 	stateScript[2]							= "onBlock2";
-	stateTimeoutValue[2]					= 0;
+	stateTimeoutValue[2]					= 0.1;
 	stateSequence[2]						= "";
 	stateAllowImageChange[2]			= true;
 
-	stateName[3]							= "";
-	stateScript[3]							= "";
-	stateTimeoutValue[3]					= 0;
-	stateTransitionOnTimeout[3]		= "";
+	stateName[3]							= "Block2b";
+	stateScript[3]							= "onBlock2";
+	stateSequence[3]						= "";
+	stateTimeoutValue[3]					= 0.1;
+	stateTransitionOnTimeout[3]		= "Block2";
+
+	stateName[4]							= "";
+	stateTransitionOnTriggerDown[4]	= "";
+	stateScript[4]							= "";
+	// stateSequence[4]						= "";
+	stateTransitionOnTimeout[4]		= "";
+	stateTimeoutValue[4]					= 0;
+
+	stateName[5]							= "";
+	stateTransitionOnTimeout[5]		= "";
+	stateScript[5]							= "";
+	stateTimeoutValue[5]					= 0;
+	stateSequence[5]						= "";
+
+	stateName[6]							= "";
+	stateScript[6]							= "";
+	stateSequence[6]						= "";
+	stateTimeoutValue[6]					= 0;
+	stateTransitionOnTimeout[6]		= "";
 };
 
-function ShieldBlockImage::onMount(%this, %obj, %slot)
+function ShieldBlockImageA::onMount(%this, %obj, %slot)
 {
 	%obj.isShieldBlocking = 1;
 	%obj.shieldBlockPercent = 1;
 
-	%obj.playThread(1, armReadyRight);
+	%obj.playThread(1, armReadyBoth);
 	%obj.hideNode("rhand");
 	%obj.hideNode("rhook");
 	%obj.hideNode("lhand");
 	%obj.hideNode("lhook");
 }
 
-function ShieldBlockImage::onUnmount(%this, %obj, %slot)
+function ShieldBlockImageA::onUnmount(%this, %obj, %slot)
 {
 	%obj.isShieldBlocking = 0;
 	%obj.shieldBlockPercent = 0;
@@ -159,20 +209,20 @@ function ShieldBlockImage::onUnmount(%this, %obj, %slot)
 	}
 }
 
-function ShieldBlockImage::onBlock1(%this, %obj, %slot)
+function ShieldBlockImageA::onBlock1(%this, %obj, %slot)
 {
 	%obj.isShieldBlocking = 1;
 	%obj.shieldBlockPercent = 0.5;
 }
 
-function ShieldBlockImage::onBlock2(%this, %obj, %slot)
+function ShieldBlockImageA::onBlock2(%this, %obj, %slot)
 {
 	if (!%obj.rmbDown)
 	{
 		%obj.shieldBlockPercent = 0;
 		%obj.isShieldBlocking = 0;
 
-		%obj.mountImage(MaceAndShieldImage, %slot);
+		%obj.mountImage(MaceAndShieldImageA, %slot);
 
 		return;
 	}
@@ -188,10 +238,10 @@ package MaceAndShieldPackage
 		{
 			%obj.rmbDown = %val;
 
-			if (%obj.canShieldBlock)
+			if (%obj.canShieldBlock && %val)
 			{
 				%obj.canShieldBlock = 0;
-				%obj.mountImage(ShieldBlockImage, 0);
+				%obj.mountImage(ShieldBlockImageA, 0);
 				return;
 			}
 		}

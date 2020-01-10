@@ -21,3 +21,4 @@ exec("./ai/mobs/goblin.cs");
 echo("");
 echo("--Executing weapons--");
 exec("./weapons/rifles.cs");
+exec("./weapons/maceshield.cs");
