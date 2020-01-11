@@ -1,3 +1,21 @@
+datablock ProjectileData(MaceAndShieldProjectile : swordProjectile)
+{
+	uiName = "";
+	directDamage = 15;
+	penetration = 50;
+	type = "Physical";
+};
+
+datablock ItemData(MaceAndShieldItem : hammerItem)
+{
+	shapeFile = "./assets/maceshield/maceshielditemvert.dts";
+	uiName = "Mace & Shield";
+	iconName = "";
+
+	image = MaceAndShieldImageA;
+	colorShiftColor = "1 1 1 1";
+};
+
 datablock ShapeBaseImageData(MaceAndShieldImageA)
 {
 	shapeFile = "./assets/maceshield/maceshield.dts";
@@ -10,10 +28,10 @@ datablock ShapeBaseImageData(MaceAndShieldImageA)
 
 	className = "WeaponImage";
 
-	// Projectile && Ammo.
+	// Projectile && Ammo.*
 	// item = MaceAndShieldItem;
-	// projectile = MaceAndShieldProjectile;
-	projectile = swordProjectile;
+	projectile = MaceAndShieldProjectile;
+	// projectile = swordProjectile;
 	projectileType = Projectile;
 
 	//melee particles shoot from eye node for consistancy
@@ -31,7 +49,7 @@ datablock ShapeBaseImageData(MaceAndShieldImageA)
 
 	// Initial start up state
 	stateName[0]							= "Activate";
-	stateTimeoutValue[0]					= 0.4;
+	stateTimeoutValue[0]					= 0.8;
 	stateSequence[0]						= "Equip";
 	stateTransitionOnTimeout[0]		= "Ready";
 	stateSound[0]							= weaponSwitchSound;
@@ -50,8 +68,10 @@ datablock ShapeBaseImageData(MaceAndShieldImageA)
 	stateName[3]							= "Recovery1";
 	stateScript[3]							= "onRecovery";
 	stateSequence[3]						= "Recovery1";
-	stateTimeoutValue[3]					= 0.4;
-	stateTransitionOnTimeout[3]		= "Ready2";
+	stateTimeoutValue[3]					= 0.6;
+	stateTransitionOnTimeout[3]		= "PreReady2";
+	// stateTransitionOnTriggerUp[3]		= "Ready2";
+	// stateWaitForTimeout[3]				= 1;
 
 	stateName[4]							= "Ready2";
 	stateTransitionOnTriggerDown[4]	= "Attack2";
@@ -69,8 +89,16 @@ datablock ShapeBaseImageData(MaceAndShieldImageA)
 	stateName[6]							= "Recovery2";
 	stateScript[6]							= "onRecovery";
 	stateSequence[6]						= "Recovery2";
-	stateTimeoutValue[6]					= 0.4;
-	stateTransitionOnTimeout[6]		= "Ready";
+	stateTimeoutValue[6]					= 0.6;
+	stateTransitionOnTimeout[6]		= "PreReady";
+	// stateTransitionOnTriggerUp[6]		= "Ready";
+	// stateWaitForTimeout[6]				= 1;
+
+	stateName[7]							= "PreReady2";
+	stateTransitionOnTriggerUp[7]		= "Ready2";
+
+	stateName[8]							= "PreReady";
+	stateTransitionOnTriggerUp[8]		= "Ready";
 };
 
 function MaceAndShieldImageA::onMount(%this, %obj, %slot)
@@ -114,16 +142,17 @@ function MaceAndShieldImageA::onAttack(%this, %obj, %slot)
 {
 	%obj.canShieldBlock = 0;
 
-	%p = new Projectile()
-	{
-		dataBlock = %this.projectile;
-		initialPosition = vectorAdd(%obj.getEyeTransform(), %obj.getEyeVector());
-		initialVelocity = vectorAdd(vectorScale(%obj.getEyeVector(), %this.projectile.muzzleVelocity),
-			vectorScale(%obj.getVelocity(), %this.projectile.velInheritFactor));
-		client = %obj.client;
-		sourceClient = %obj.client;
-		sourceObj = %obj;
-	};
+	// %p = new Projectile()
+	// {
+	// 	dataBlock = %this.projectile;
+	// 	initialPosition = vectorAdd(%obj.getEyeTransform(), %obj.getEyeVector());
+	// 	initialVelocity = vectorAdd(vectorScale(%obj.getEyeVector(), %this.projectile.muzzleVelocity),
+	// 		vectorScale(%obj.getVelocity(), %this.projectile.velInheritFactor));
+	// 	client = %obj.client;
+	// 	sourceClient = %obj.client;
+	// 	sourceObj = %obj;
+	// };
+	doMeleeAttack(%obj, %this.projectile, 1.5, 1.5, 0);
 }
 
 function MaceAndShieldImageA::onRecovery(%this, %obj, %slot)
@@ -134,7 +163,7 @@ function MaceAndShieldImageA::onRecovery(%this, %obj, %slot)
 datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 {
 	stateName[0]							= "Parry";
-	stateTimeoutValue[0]					= 0.2;
+	stateTimeoutValue[0]					= 0.3;
 	stateSequence[0]						= "Block";
 	stateTransitionOnTimeout[0]		= "Block1";
 	stateAllowImageChange[0]			= false;
@@ -160,6 +189,8 @@ datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 	stateSequence[3]						= "";
 	stateTimeoutValue[3]					= 0.1;
 	stateTransitionOnTimeout[3]		= "Block2";
+	stateTransitionOnTriggerUp[3]		= "";
+	stateWaitForTimeout[3]				= 0;
 
 	stateName[4]							= "";
 	stateTransitionOnTriggerDown[4]	= "";
@@ -179,6 +210,14 @@ datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 	stateSequence[6]						= "";
 	stateTimeoutValue[6]					= 0;
 	stateTransitionOnTimeout[6]		= "";
+	stateTransitionOnTriggerUp[6]		= "";
+	stateWaitForTimeout[6]				= 0;
+
+	stateName[7]							= "";
+	stateTransitionOnTriggerUp[7]		= "";
+
+	stateName[8]							= "";
+	stateTransitionOnTriggerUp[8]		= "";
 };
 
 function ShieldBlockImageA::onMount(%this, %obj, %slot)

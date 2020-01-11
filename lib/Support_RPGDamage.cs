@@ -112,8 +112,8 @@ function getModifiedDamage(%proj, %level, %armor, %resist, %damage, %isRadius)
 	
 	if (%levDiff < 100)
 	{
-		%physDef = %armor - %proj.penetration;
-		%magicDef = %resist - %proj.penetration;
+		%physDef = getMax(%armor - %proj.penetration, 0);
+		%magicDef = getMax(%resist - %proj.penetration, 0);
 		%levelMod = (100 - %levDiff) / 100;
 		%levelMod = %levelMod * mSqrt(%levelMod);
 		//75 diff = 12.5% damage
