@@ -160,8 +160,30 @@ function MaceAndShieldImageA::onRecovery(%this, %obj, %slot)
 	%obj.canShieldBlock = 0;
 }
 
-datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
+datablock ShapeBaseImageData(ShieldBlockImageA)
 {
+	shapeFile = "./assets/maceshield/maceshield.dts";
+	emap = true;
+
+	mountPoint = 0;
+	offset = "0 0 0";
+	eyeOffset = "0.75 1.2 -0.5"; //"0.7 1.2 -0.5";
+	rotation = eulerToMatrix( "0 0 0" );
+
+	className = "WeaponImage";
+
+	// Projectile && Ammo.*
+	// item = MaceAndShieldItem;
+	projectile = MaceAndShieldProjectile;
+	// projectile = swordProjectile;
+	projectileType = Projectile;
+
+	//melee particles shoot from eye node for consistancy
+	melee = true;
+
+	doColorShift = false;
+	colorShiftColor = MaceAndShieldItem.colorShiftColor;
+
 	stateName[0]							= "Parry";
 	stateTimeoutValue[0]					= 0.3;
 	stateSequence[0]						= "Block";
@@ -170,9 +192,7 @@ datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 	stateSound[0]							= weaponSwitchSound;
 
 	stateName[1]							= "Block1";
-	stateTransitionOnTriggerDown[1]	= "";
 	stateScript[1]							= "onBlock1";
-	stateSequence[1]						= "";
 	stateAllowImageChange[1]			= false;			//timeout swapping weapons/back to normal mace for 0.4s total
 	stateTransitionOnTimeout[1]		= "Block2";
 	stateTimeoutValue[1]					= 0.4;
@@ -181,43 +201,12 @@ datablock ShapeBaseImageData(ShieldBlockImageA : MaceAndShieldImageA)
 	stateTransitionOnTimeout[2]		= "Block2b";
 	stateScript[2]							= "onBlock2";
 	stateTimeoutValue[2]					= 0.1;
-	stateSequence[2]						= "";
 	stateAllowImageChange[2]			= true;
 
 	stateName[3]							= "Block2b";
 	stateScript[3]							= "onBlock2";
-	stateSequence[3]						= "";
 	stateTimeoutValue[3]					= 0.1;
 	stateTransitionOnTimeout[3]		= "Block2";
-	stateTransitionOnTriggerUp[3]		= "";
-	stateWaitForTimeout[3]				= 0;
-
-	stateName[4]							= "";
-	stateTransitionOnTriggerDown[4]	= "";
-	stateScript[4]							= "";
-	// stateSequence[4]						= "";
-	stateTransitionOnTimeout[4]		= "";
-	stateTimeoutValue[4]					= 0;
-
-	stateName[5]							= "";
-	stateTransitionOnTimeout[5]		= "";
-	stateScript[5]							= "";
-	stateTimeoutValue[5]					= 0;
-	stateSequence[5]						= "";
-
-	stateName[6]							= "";
-	stateScript[6]							= "";
-	stateSequence[6]						= "";
-	stateTimeoutValue[6]					= 0;
-	stateTransitionOnTimeout[6]		= "";
-	stateTransitionOnTriggerUp[6]		= "";
-	stateWaitForTimeout[6]				= 0;
-
-	stateName[7]							= "";
-	stateTransitionOnTriggerUp[7]		= "";
-
-	stateName[8]							= "";
-	stateTransitionOnTriggerUp[8]		= "";
 };
 
 function ShieldBlockImageA::onMount(%this, %obj, %slot)
